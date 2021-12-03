@@ -1,6 +1,15 @@
 (function () {
     LiveConversion();
     comprarBitcoin();
+    $(".box.single a").on("click", async function() {
+        let lempiras = $(this).find('.precio').val();
+        let result = await calcularConversion("BTC");
+        let btc = (parseFloat(lempiras) / result).toFixed(8);
+        console.log(btc);
+        console.log(lempiras);
+        $("#id_amount_field").val(btc);
+        $("#id_lempiras_field").val(lempiras);
+    });
 })();
 
 function calcularConversion(criptomoneda) {
@@ -14,7 +23,6 @@ function calcularConversion(criptomoneda) {
             if (oReq.readyState == 4) {
                 if (oReq.status == 200) {
                     let result = oReq.response[68].rate;
-                    result += result * 0.1;
                     resolve(result);
                 }
             }
@@ -22,37 +30,27 @@ function calcularConversion(criptomoneda) {
     });
 }
 
-function calculo(valor) {
-    let resultado = valor + valor * 0.1;
-    resultado = resultado.toLocaleString("de-DE", {
-        style: "currency",
-        currency: "HNL",
-        minimumFractionDigits: 4,
-    });
-    console.log("Resultado", result);
-    return resultado;
-}
-
 function LiveConversion() {
-    $("#textInput").on("change", async function () {
+    document.getElementById('textInput').oninput = async function() {
         let result = await calcularConversion("BTC");
-        document.getElementById("textInput2").value = result * parseFloat($(this).val());
-    });
+        document.getElementById("textInput2").value = result * parseFloat(document.getElementById('textInput').value);
+    };
 
-    $("#textInput2").on("change", async function () {
+    document.getElementById('textInput2').oninput = async function() {
         let result = await calcularConversion("BTC");
-        document.getElementById("textInput").value = parseFloat($(this).val()) / result;
-    });
+        document.getElementById("textInput").value = (parseFloat(document.getElementById('textInput2').value) / result).toFixed(8);
+    };
 }
 
 function comprarBitcoin() {
     $("#btncomprar").on("click", function () {
-        let btc = document.getElementById("textInput").value;
+        let btc = $("#textInput").val();
+        let lempiras = $("#textInput2").val();
         console.log(btc);
-        document.getElementById("amount").value = btc;
+        console.log(lempiras);
+        $("#id_amount_field").val(btc);
+        $("#id_lempiras_field").val(lempiras);
     });
-
-
 }
 
 

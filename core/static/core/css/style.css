@@ -996,10 +996,18 @@ a:focus {
   width: 170px;
   position: relative;
   left: 85px;
-  top: -50px;
+  top: -50px; 
+}
 
-
- 
+.popup-title {
+  font-weight: bold;
+}
+form label {
+  margin-bottom: 0;
+}
+form input {
+  display: block;
+  margin-bottom: 10px;
 }
 
 @media screen and (max-width: 700px){

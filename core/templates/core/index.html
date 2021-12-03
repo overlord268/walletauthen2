@@ -89,60 +89,35 @@
 
                 <a class="close" href="#">&times;</a>
                 <div class="content">
-                    <h3>
-                        Escoja su metodo de pago:
+                    <div class="popup-title">
+                        Con tarjeta de crédito o débito:
+                    </div>
 
-                    </h3>
+                    <form action="{% url 'pago' %}" method="post">
+                        {% csrf_token %}
+                        {{ form }}
+                        <input type="submit" id="comprar" value="Comprar">
+                    </form>
 
-                    {% csrf_token %}
-                    <input type="text" id="address" placeholder="Address">
-                    <input type="number" id="amount" placeholder="Cantidad">
-                    <!--<input type="button" id="comprar" placeholder="comprar">-->
+                    <hr />
+                    <div class="popup-title">
+                        Por transferencia Bancaria:
+                    </div>
+                    <div>
+                        <ul>
 
-                    <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
-</button>
+                            <li>LAFISE- La Bitcoinera</li>
+                            <li> Cuenta de Cheques (L.): 114503001076</li>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
+                            <li>RTN: 0801190191693433</li>
+                            <li>Por favor, enviar copia del comprobante al: +504 3216 1911 o enviarla al correo
+                                operations@labitcoinera.com
+                            </li>
+                            TGU Consulting Group S. de R. L. de C.V
 
+                        </ul>
+                    </div>
                 </div>
-                <h3>
-                    Por transferencia Bancaria.
-                </h3>
-                <div>
-                    <ul>
-
-                        <li>LAFISE- La Bitcoinera</li>
-                        <li> Cuenta de Cheques (L.): 114503001076</li>
-
-                        <li>RTN: 0801190191693433</li>
-                        <li>Porfavor enviar copia del comprobante al: +504 3216 1911 o enviar por correo:
-                            operations@labitcoinera.com
-                        </li>
-                        TGU Consulting Group S. de R.L de C.V
-
-                    </ul>
-                </div>
-
-
             </div>
 
         </div>
@@ -152,11 +127,14 @@
                     <h2>
                         Crypto Monedas Disponibles & Montos
                     </h2>
+                    {% if success %}
+                    <label>Su transacción ha sido exitosa</label>
+                    {% endif %}
                 </div>
                 <div class="row">
                     <!--"col-md-6-->
                     <div class="col-sm-6 col-xl-3" type="number" value="3000">
-                        <div class="box">
+                        <div class="box single">
                             <a href="#popup1">
                                 <div class="img-box">
                                     <img src="{% static "core/images/w1.png" %}" alt="">
@@ -168,8 +146,9 @@
                                     <h6>
                                         Precio:
                                         <span>
-                      3000L.
-                    </span>
+                                        3000L.
+                                        </span>
+                                        <input type="hidden" class="precio" value="3000" />
                                     </h6>
                                 </div>
                                 <div class="new">
@@ -181,7 +160,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6 col-xl-3">
-                        <div class="box">
+                        <div class="box single">
                             <a href="#popup1">
                                 <div class="img-box">
                                     <img src="{% static "core/images/w1.png" %}" alt="">
@@ -193,8 +172,9 @@
                                     <h6>
                                         Precio:
                                         <span>
-                      2000L.
-                    </span>
+                                        2000L.
+                                        </span>
+                                        <input type="hidden" class="precio" value="2000" />
                                     </h6>
                                 </div>
                                 <div class="new">
@@ -206,7 +186,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6 col-xl-3">
-                        <div class="box">
+                        <div class="box single">
                             <a href="#popup1">
                                 <div class="img-box">
                                     <img src="{% static "/core/images/w1.png" %}" alt="">
@@ -220,6 +200,7 @@
                                         <span>
                                          1000L.
                                          </span>
+                                         <input type="hidden" class="precio" value="1000" />
                                     </h6>
                                 </div>
                                 <div class="new">
@@ -231,7 +212,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6 col-xl-3">
-                        <div class="box">
+                        <div class="box single">
                             <a href="#popup1">
                                 <div class="img-box">
                                     <img src="{% static "core/images/w1.png" %}" alt="">
@@ -243,8 +224,9 @@
                                     <h6>
                                         Precio:
                                         <span>
-                      500L.
-                    </span>
+                                        500L.
+                                        </span>
+                                        <input type="hidden" class="precio" value="500" />
                                     </h6>
                                 </div>
                                 <div class="new">
@@ -256,7 +238,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6 col-xl-3">
-                        <div class="box">
+                        <div class="box single">
                             <a href="#popup1">
                                 <div class="img-box">
                                     <img src="{% static  "core/images/w1.png" %}" alt="">
@@ -268,8 +250,9 @@
                                     <h6>
                                         Precio:
                                         <span>
-                      300L.
-                    </span>
+                                        300L.
+                                        </span>
+                                        <input type="hidden" class="precio" value="300" />
                                     </h6>
                                 </div>
                                 <div class="new">
@@ -281,7 +264,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6  col-xl-3">
-                        <div class="box">
+                        <div class="box single">
                             <a href="#popup1">
                                 <div class="img-box">
                                     <img src="{% static "core/images/w1.png" %}" alt="">
@@ -293,8 +276,9 @@
                                     <h6>
                                         Precio:
                                         <span>
-                      200L.
-                    </span>
+                                        200L.
+                                        </span>
+                                        <input type="hidden" class="precio" value="200" />
                                     </h6>
                                 </div>
                                 <div class="new">
@@ -306,7 +290,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6 col-xl-3">
-                        <div class="box">
+                        <div class="box single">
                             <a href="#popup1">
                                 <div class="img-box">
                                     <img src="{% static  "/core/images/w1.png" %}" alt="">
@@ -318,9 +302,9 @@
                                     <h6>
                                         Precios:
                                         <span>
-                      100L.
-
-                    </span>
+                                        100L.
+                                        </span>
+                                        <input type="hidden" class="precio" value="100" />
                                     </h6>
                                 </div>
                                 <div class="new">
@@ -452,145 +436,31 @@
             </div>
         </div>
     </footer>
-    <!-- final section -->
+            </div>
+        </div>
+        <!-- final section -->
 
-    <!-- jQery -->
-    <script src="{% static "core/js/jquery-3.4.1.min.js" %}"></script>
-    <!-- popper js -->
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-    </script>
-    <!-- b js -->
-    <script src= {% static "core/js/bootstrap.js" %}></script>
-    <!-- s -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
-    </script>
-    <!--  js -->
-    <script src="{% static "core/js/custom.js" %}"></script>
-    <!-- Empieza google Map -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
-    <!-- termina Google Map -->
-    <!--Conversion Javascript-->
-    <script src="{% static "core/js/conversion.js" %}"></script>
-</div>
-</div>
-<!-- shop section -->
-<script>
-
-
-    $('#comprar').on('click', function () {
-        localStorage = window.localStorage;
-        var amount = $('#amount').val()
-        var address = $('#address').val()
-
-        if ((amount && address) == null) {
-            localStorage.setItem("amount", JSON.stringify(amount))
-            localStorage.setItem("address", JSON.stringify(address))
-
-        }
-
-//$('#popup1').hide()
-    })
-    console.log('sirve')
-
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-    const csrftoken = getCookie('csrftoken');
-    console.log(csrftoken)
-
-    function sendPago() {
-        var url = "https://preprod-api.todopago.hn/pay/v1/direct-payment-without-register";
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", url);
-
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.setRequestHeader("X-Token", "0beee2e9-7b1e-4e36-b993-bcdfd00b46ba");
-        xhr.setRequestHeader("X-Tenant", "HNTP");
-        xhr.setRequestHeader("X-Content", "json");
-        xhr.setRequestHeader("User-Agent", "PostmanRuntime/7.28.4");
-        xhr.setRequestHeader("Accept", "*/*");
-        xhr.setRequestHeader("Accept-Encoding", "gzip,deflate,br");
-        xhr.setRequestHeader("Connection", "keep-alive");
-        xhr.setRequestHeader("Authorization", "Bearer e9d849ef-a64b-4123-b768-d09dd2376dd6");
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                console.log(xhr.status);
-                console.log(xhr.responseText);
-            }
-        };
-
-        var data = `{
-   "accountNumber": "4111111111111111",
-   "amount": 105,
-   "taxes": "15",
-   "cardHolderName": "David Universidad",
-   "comment": "Pago Directo BDO 3",
-   "commerceID": 339,
-   "customerName": "David Tejada 7",
-   "cvc": "123",
-   "expirationMonth": "12",
-   "expirationYear": "34",
-   "externalReference": "e9d849ef-a64b-4123-b768-d09dd2376d22",
-   "customerEmail": "dtejada@isonet-globalsys.com",
-   "terminalNbr": "1"
-}`;
-
-        const result = xhr.send(data);
-        console.log(result)
-
-
-    }
-
-    $('#comprar').on('click', async function () {
-        console.log('Entrooo')
-        let e = await sendPOST('comprar', $('#address').val(), $('#amount').val())
-        console.log(e);
-    });
-
-
-    function sendPOST(action, address, amount) {
-
-        return new Promise(resolve => {
-            let e = fetch("{% url 'home'%}", {
-                method: 'post',
-                body: JSON.stringify({
-                    'destination': address,//'bc1qjyzmnpftyr2ye4xv56r5uykemczypycr7wdfaa' ,
-                    'amount': amount,
-                    'password': 'daniel',
-                    'addtransaction': true
-
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken
-                }
-            })
-            resolve(e)
-        });
-    }
-
-
-</script>
-<script src="https://preprod-boton.todopago.hn/todopago-widget.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
-</body>
-
+        <!-- jQery -->
+        <script src="{% static "core/js/jquery-3.4.1.min.js" %}"></script>
+        <!-- popper js -->
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+                integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+        </script>
+        <!-- b js -->
+        <script src= {% static "core/js/bootstrap.js" %}></script>
+        <!-- s -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+        </script>
+        <!--  js -->
+        <script src="{% static "core/js/custom.js" %}"></script>
+        <!-- Empieza google Map -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
+        <!-- termina Google Map -->
+        <!--Conversion Javascript-->
+        <script src="{% static "core/js/conversion.js" %}"></script>
+            
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+                crossorigin="anonymous"></script>
+    </body>
 </html>
