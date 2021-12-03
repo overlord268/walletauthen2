@@ -159,11 +159,12 @@
                 </div>
                 <div class="row">
                     <!--"col-md-6-->
-                    <div class="col-sm-6 col-xl-3" type="number" value="3000">
+                    {% for item in btc_products %}
+                    <div class="col-sm-6 col-xl-3" type="number" value="{{ item.price }}">
                         <div class="box single">
                             <a href="#popup1">
                                 <div class="img-box">
-                                    <img src="{% static "core/images/w1.png" %}" alt="">
+                                    <img src="{% static "core/images/w1.png" %}" alt="bitcoin logo">
                                 </div>
                                 <div class="detail-box">
                                     <h6>
@@ -171,179 +172,21 @@
                                     </h6>
                                     <h6>
                                         Precio:
-                                        <span>
-                                        3000L.
-                                        </span>
-                                        <input type="hidden" class="precio" value="3000" />
+                                        <span>{{ item.price }}L.</span>
+                                        <input type="hidden" class="precio" value="{{ item.price }}" />
                                     </h6>
                                 </div>
                                 <div class="new">
-                  <span>
-                    Bitcoin
-                  </span>
+                                    <span>
+                                        Bitcoin
+                                    </span>
                                 </div>
                             </a>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="box single">
-                            <a href="#popup1">
-                                <div class="img-box">
-                                    <img src="{% static "core/images/w1.png" %}" alt="">
-                                </div>
-                                <div class="detail-box">
-                                    <h6>
-                                        BTC
-                                    </h6>
-                                    <h6>
-                                        Precio:
-                                        <span>
-                                        2000L.
-                                        </span>
-                                        <input type="hidden" class="precio" value="2000" />
-                                    </h6>
-                                </div>
-                                <div class="new">
-                  <span>
-                    Bitcoin
-                  </span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="box single">
-                            <a href="#popup1">
-                                <div class="img-box">
-                                    <img src="{% static "/core/images/w1.png" %}" alt="">
-                                </div>
-                                <div class="detail-box">
-                                    <h6>
-                                        BTC
-                                    </h6>
-                                    <h6>
-                                        Precio:
-                                        <span>
-                                         1000L.
-                                         </span>
-                                         <input type="hidden" class="precio" value="1000" />
-                                    </h6>
-                                </div>
-                                <div class="new">
-                  <span>
-                    Bitcoin
-                  </span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="box single">
-                            <a href="#popup1">
-                                <div class="img-box">
-                                    <img src="{% static "core/images/w1.png" %}" alt="">
-                                </div>
-                                <div class="detail-box">
-                                    <h6>
-                                        BTC
-                                    </h6>
-                                    <h6>
-                                        Precio:
-                                        <span>
-                                        500L.
-                                        </span>
-                                        <input type="hidden" class="precio" value="500" />
-                                    </h6>
-                                </div>
-                                <div class="new">
-                  <span>
-                    Bitcoin
-                  </span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="box single">
-                            <a href="#popup1">
-                                <div class="img-box">
-                                    <img src="{% static  "core/images/w1.png" %}" alt="">
-                                </div>
-                                <div class="detail-box">
-                                    <h6>
-                                        BTC
-                                    </h6>
-                                    <h6>
-                                        Precio:
-                                        <span>
-                                        300L.
-                                        </span>
-                                        <input type="hidden" class="precio" value="300" />
-                                    </h6>
-                                </div>
-                                <div class="new">
-                  <span>
-                    Bitcoin
-                  </span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6  col-xl-3">
-                        <div class="box single">
-                            <a href="#popup1">
-                                <div class="img-box">
-                                    <img src="{% static "core/images/w1.png" %}" alt="">
-                                </div>
-                                <div class="detail-box">
-                                    <h6>
-                                        BTC
-                                    </h6>
-                                    <h6>
-                                        Precio:
-                                        <span>
-                                        200L.
-                                        </span>
-                                        <input type="hidden" class="precio" value="200" />
-                                    </h6>
-                                </div>
-                                <div class="new">
-                  <span>
-                    Bitcoin
-                  </span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="box single">
-                            <a href="#popup1">
-                                <div class="img-box">
-                                    <img src="{% static  "/core/images/w1.png" %}" alt="">
-                                </div>
-                                <div class="detail-box">
-                                    <h6>
-                                        BTC
-                                    </h6>
-                                    <h6>
-                                        Precios:
-                                        <span>
-                                        100L.
-                                        </span>
-                                        <input type="hidden" class="precio" value="100" />
-                                    </h6>
-                                </div>
-                                <div class="new">
-                  <span>
-                    Bitcoin
-                  </span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+                    {% endfor %}
                     <div class="col-sm-6 col-xl-3">
                         <div class="box">
-
                             <div class="img-box">
                                 <div id="result">
                                     <span>Lempiras:</span>
@@ -353,25 +196,22 @@
                                     <span>Bitcoin</span>
                                     <input type="number" id="textInput" value="number" method="post"/>
                                 </div>
-
                             </div>
                             <div class="detail-box">
                                 <h6>
                                     BTC
                                 </h6>
                                 <h6>
-
                                     <span>
                                         <a href="#popup1" id="btncomprar">Comprar</a>
-                    </span>
+                                    </span>
                                 </h6>
                             </div>
                             <div class="new">
-                  <span>
-                    Ingrese su Monto:
-                  </span>
+                                <span>
+                                    Ingrese su Monto:
+                                </span>
                             </div>
-                            </a>
                         </div>
                     </div>
                 </div>

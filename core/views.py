@@ -1,30 +1,31 @@
-import json
 from datetime import datetime
-from django.forms.fields import JSONString
 import requests
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
 from .forms import CompraForm
-
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
 from django.views.generic import *
 from requests.structures import CaseInsensitiveDict
-from argon2 import PasswordHasher
 
 def index(request):
+    btc_products = [
+        { "price": 3000 },
+        { "price": 2000 },
+        { "price": 1000 },
+        { "price": 500 },
+        { "price": 300 },
+        { "price": 200 },
+        { "price": 100 }
+    ]
     form = CompraForm()
     success = request.GET.get('s') == '1'
     context = {
         'form': form,
-        'success': success
+        'success': success,
+        'btc_products': btc_products
     }
     return render(request, 'core/index.html', context)
 
 def pago(request):
-    print("request")
-    print(request)
     if request.method == 'POST':
         form = CompraForm(request.POST)
         if form.is_valid():
@@ -40,14 +41,10 @@ def pago(request):
                 tarjetaExpirationMonth, 
                 tarjetaExpirationYear
             )
-            print("-------responseTodoPago---------------")
-            print(responseTodoPago)
 
             if responseTodoPago['status'] == 200:
                 # ELECTRUM
-                #response = postElectrum(form.cleaned_data['address_field'], form.cleaned_data['amount_field'])
-                #print(response.status_code)
-                print(responseTodoPago)
+                response = postElectrum(form.cleaned_data['address_field'], form.cleaned_data['amount_field'])
             else:
                 return responseTodoPago
 
@@ -62,11 +59,8 @@ def pago(request):
 
 def postTodoPago(lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC, tarjetaExpirationMonth, tarjetaExpirationYear):
     responseLogin = postTodoPagoLogin()
-    print("-------responseLogin---------------")
-    print(responseLogin)
     responseLoginJSON = responseLogin.json()
-    print("-------responseLoginJSON---------------")
-    print(responseLoginJSON)
+    
     if responseLoginJSON['status'] == 200:
         token = responseLoginJSON['data']['token']
         responsePayDirect = postTodoPagoPayDirect(token, lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC, tarjetaExpirationMonth, tarjetaExpirationYear)
