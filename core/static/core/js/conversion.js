@@ -5,8 +5,6 @@
         let lempiras = $(this).find('.precio').val();
         let result = await calcularConversion("BTC");
         let btc = (parseFloat(lempiras) / result).toFixed(8);
-        console.log(btc);
-        console.log(lempiras);
         $("#id_amount_field").val(btc);
         $("#id_lempiras_field").val(lempiras);
     });
@@ -23,6 +21,7 @@ function calcularConversion(criptomoneda) {
             if (oReq.readyState == 4) {
                 if (oReq.status == 200) {
                     let result = oReq.response[68].rate;
+                    result += 0.1 * result;
                     resolve(result);
                 }
             }
@@ -46,8 +45,6 @@ function comprarBitcoin() {
     $("#btncomprar").on("click", function () {
         let btc = $("#textInput").val();
         let lempiras = $("#textInput2").val();
-        console.log(btc);
-        console.log(lempiras);
         $("#id_amount_field").val(btc);
         $("#id_lempiras_field").val(lempiras);
     });
