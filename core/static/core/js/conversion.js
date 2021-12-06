@@ -7,6 +7,8 @@
         let btc = (parseFloat(lempiras) / result).toFixed(8);
         $("#id_amount_field").val(btc);
         $("#id_lempiras_field").val(lempiras);
+        $("#id_amount_field").prop('disabled', true);
+        $("#id_lempiras_field").prop('disabled', true);
     });
 })();
 
@@ -47,6 +49,8 @@ function comprarBitcoin() {
         let lempiras = $("#textInput2").val();
         $("#id_amount_field").val(btc);
         $("#id_lempiras_field").val(lempiras);
+        $("#id_amount_field").prop('disabled', true);
+        $("#id_lempiras_field").prop('disabled', true);
     });
 }
 

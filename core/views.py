@@ -44,7 +44,7 @@ def pago(request):
 
             if responseTodoPago['status'] == 200:
                 # ELECTRUM
-                response = postElectrum(form.cleaned_data['address_field'], form.cleaned_data['amount_field'])
+                # response = postElectrum(form.cleaned_data['address_field'], form.cleaned_data['amount_field'])
             else:
                 return responseTodoPago
 

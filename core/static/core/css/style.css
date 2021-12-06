@@ -928,6 +928,64 @@ a:focus {
   left: -27px;
 }
 
+.card {
+  margin-bottom: 1.5rem
+}
+
+.card {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid #c8ced3;
+  border-radius: .25rem
+}
+
+.card-header:first-child {
+  border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0
+}
+
+.card-header {
+  padding: .75rem 1.25rem;
+  margin-bottom: 0;
+  background-color: #f0f3f5;
+  border-bottom: 1px solid #c8ced3
+}
+
+.card-body {
+  flex: 1 1 auto;
+  padding: 1.25rem
+}
+
+.form-control:focus {
+  color: #5c6873;
+  background-color: #fff;
+  border-color: #c8ced3 !important;
+  outline: 0;
+  box-shadow: 0 0 0 #F44336
+}
+form .padding {
+  padding: 10px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .overlay {
   position: fixed;
   top: 0;
@@ -950,7 +1008,7 @@ a:focus {
   padding: 20px;
   background: #fff;
   border-radius: 5px;
-  width: 30%;
+  width: 50%;
   position: relative;
   transition: all 5s ease-in-out;
   
@@ -970,8 +1028,9 @@ a:focus {
   color: #06D85F;
 }
 .popup .content {
-  max-height: 30%;
-  overflow: auto;
+  height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 #btcholder input {
   width: 170px;
@@ -986,9 +1045,7 @@ a:focus {
   right: 97px;
 }
 #result span {
- 
-
-   position: relative;
+  position: relative;
   bottom: 60px;
   left: 70px;
 }

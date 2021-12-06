@@ -98,8 +98,70 @@
 
                     <form action="{% url 'pago' %}" method="post">
                         {% csrf_token %}
-                        {{ form }}
-                        <input type="submit" id="comprar" value="Comprar">
+                        <div class="padding">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="datos">
+                                        {{ form.lempiras_field.label_tag }}
+                                        {{ form.lempiras_field }}
+                                        {{ form.amount_field.label_tag }}
+                                        {{ form.amount_field }}
+
+                                        {{ form.address_field.label_tag }}
+                                        {{ form.address_field }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <strong>Tarjeta</strong>
+                                            <small>de crédito/débito</small>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="form-group">
+                                                        <label>Nombre</label>
+                                                        {{ form.tarjeta_nombre_field }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="form-group">
+                                                        <label for="ccnumber">Credit Card Number</label>
+                                                        <div class="input-group">
+                                                            {{ form.tarjeta_numero_field }}
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <i class="mdi mdi-credit-card"></i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-sm-6">
+                                                    <label for="ccmonth">Month</label>
+                                                    {{ form.tarjeta_expiration_field }}
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="cvv">CVV/CVC</label>
+                                                        {{ form.tarjeta_cvc_field }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-sm btn-danger" type="reset">Reset</button>
+                                            <input type="submit" id="comprar" value="Comprar" class="btn btn-sm btn-success float-right">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </form>
 
                     <hr />
