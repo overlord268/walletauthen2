@@ -58,68 +58,91 @@ def pago(request):
     return render(request, 'core/index.html', context)
 
 def postTodoPago(lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC, tarjetaExpirationMonth, tarjetaExpirationYear):
-    responseLogin = postTodoPagoLogin()
-    responseLoginJSON = responseLogin.json()
-    
-    if responseLoginJSON['status'] == 200:
-        token = responseLoginJSON['data']['token']
-        responsePayDirect = postTodoPagoPayDirect(token, lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC, tarjetaExpirationMonth, tarjetaExpirationYear)
-        responsePayDirectJSON = responsePayDirect.json()
-        return responsePayDirectJSON
-    
-    return responseLoginJSON
+    try:
+        responseLogin = postTodoPagoLogin()
+        responseLoginJSON = responseLogin.json()
+        
+        if responseLoginJSON['status'] == 200:
+            token = responseLoginJSON['data']['token']
+            responsePayDirect = postTodoPagoPayDirect(token, lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC, tarjetaExpirationMonth, tarjetaExpirationYear)
+            responsePayDirectJSON = responsePayDirect.json()
+            return responsePayDirectJSON
+        
+        print(responseLogin, "REspues de todo pago")
+        return responseLoginJSON
+    except Exception as e:
+        print("ERROR:", str(e))
 
 def postTodoPagoLogin():
-    urlLogin = 'https://preprod-api.todopago.hn/pay/v1/login'
-    user = '0801-9019-1693431'
-    password = 'todopago'
+    try:
+        urlLogin = 'https://preprod-api.todopago.hn/pay/v1/login'
+        user = '0801-9019-1693431'
+        password = 'todopago'
 
-    headers = CaseInsensitiveDict()
-    headers["Content-Type"] = "application/json"
-    headers["Accept"] = "*/*"
-    headers["X-Tenant"] = "HNTP"
+        headers = CaseInsensitiveDict()
+        headers["Content-Type"] = "application/json"
+        headers["Accept"] = "*/*"
+        headers["X-Tenant"] = "HNTP"
 
-    body = '{"user":"' + user + '", "password":"' + password + '"}'
+        body = '{"user":"' + user + '", "password":"' + password + '"}'
 
-    return requests.post(urlLogin, headers=headers, data=body)
+        result = requests.post(urlLogin, headers=headers, data=body)
+        print(result, "Todo pago login")
+        return result
+    except Exception as e:
+        print("ERROR:", str(e))
 
 def postTodoPagoPayDirect(token, lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC, tarjetaExpirationMonth, tarjetaExpirationYear):
-    urlPayDirect = 'https://preprod-api.todopago.hn/pay/v1/direct-payment-without-register'
-    
-    headers = CaseInsensitiveDict()
-    headers["Content-Type"] = "application/json"
-    headers["Accept"] = "*/*"
-    headers["X-Token"] = token
-    headers["X-Tenant"] = "HNTP"
-    headers["X-Content"] = "json"
+    try:
+        urlPayDirect = 'https://preprod-api.todopago.hn/pay/v1/direct-payment-without-register'
+        
+        headers = CaseInsensitiveDict()
+        headers["Content-Type"] = "application/json"
+        headers["Accept"] = "*/*"
+        headers["X-Token"] = token
+        headers["X-Tenant"] = "HNTP"
+        headers["X-Content"] = "json"
 
-    now = datetime.now()
-    externalReference = "".join(tarjetaNombre.split()) + "-" + now.strftime('%d-%m-%Y-%H:%M')
+        now = datetime.now()
+        externalReference = "".join(tarjetaNombre.split()) + "-" + now.strftime('%d-%m-%Y-%H:%M')
 
-    body = '{"accountNumber": "' + tarjetaNumero + '", "amount": ' + str(lempiras) 
-    body += ', "taxes": "15", "cardHolderName": "' 
-    body += tarjetaNombre + '", "comment": "Pago Directo ' + tarjetaNombre 
-    body += '", "commerceID": 429, "customerName": "' + tarjetaNombre 
-    body += '", "cvc": "' + str(tarjetaCVC) 
-    body += '", "expirationMonth": "' + tarjetaExpirationMonth 
-    body += '", "expirationYear": "' + tarjetaExpirationYear 
-    body += '", "externalReference": "'+ externalReference + '", "customerEmail": "dtejada@isonet-globalsys.com", "terminalNbr": "1"}'
-    
-    return requests.post(urlPayDirect, headers=headers, data=body)
+        body = '{"accountNumber": "' + tarjetaNumero + '", "amount": ' + str(lempiras) 
+        body += ', "taxes": "15", "cardHolderName": "' 
+        body += tarjetaNombre + '", "comment": "Pago Directo ' + tarjetaNombre 
+        body += '", "commerceID": 429, "customerName": "' + tarjetaNombre 
+        body += '", "cvc": "' + str(tarjetaCVC) 
+        body += '", "expirationMonth": "' + tarjetaExpirationMonth 
+        body += '", "expirationYear": "' + tarjetaExpirationYear 
+        body += '", "externalReference": "'+ externalReference + '", "customerEmail": "dtejada@isonet-globalsys.com", "terminalNbr": "1"}'
+        
+        result = requests.post(urlPayDirect, headers=headers, data=body)
+        print(result, "Todo pago pay direct")
+        return result
+
+    except Exception as e:
+        print("ERROR:", str(e))
 
 def postElectrum(destination, amount):
-    user = 'user'
-    password = 'k1RIVG6tRhy9TQVANfBOng=='
-    host = '127.0.0.1'
-    port = '7777'
-    bodyPassword = 'daniel'
-    
-    url = 'http://' + user + ':' + password + '@' + host + ':' + port + '/'
+    print("ENtro al post")
+    try:
+        user = 'user'
+        password = 'FlBcaqY5Z5sYbW7XT3LANw=='
+        host = '127.0.0.1'
+        port = '7777'
+        bodyPassword = 'IamkuramA1998.'
+        
+        url = 'http://' + user + ':' + password + '@' + host + ':' + port + '/'
 
-    headers = CaseInsensitiveDict()
-    headers["Authorization"] = "Basic dXNlcjpGbEJjYXFZNVo1c1liVzdYVDNMQU53PT0="
-    headers["Content-Type"] = "application/json"
+        headers = CaseInsensitiveDict()
+        headers["Authorization"] = "Basic dXNlcjpGbEJjYXFZNVo1c1liVzdYVDNMQU53PT0="
+        headers["Content-Type"] = "application/json"
 
-    data = '{"jsonrpc":"2.0","id":"curltext","method":"payto","params":{"destination":"' + destination + '", "amount":"' + str(amount) + '", "password":"' + bodyPassword + '"}}'
-    
-    return requests.post(url, headers=headers, data=data)
+        data = '{"jsonrpc":"2.0","id":"curltext","method":"payto","params":{"destination":"' + destination + '", "amount":"' + str(amount) + '", "password":"' + bodyPassword + '"}}'
+        
+        result = requests.post(url, headers=headers, data=data)
+
+        print(result, "Post Elecrum")
+        return result
+
+    except Exception as e:
+        print("ERROR:", str(e))
