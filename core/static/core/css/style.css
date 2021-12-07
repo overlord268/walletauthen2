@@ -1058,6 +1058,9 @@ form .padding {
 
 .popup-title {
   font-weight: bold;
+  width: 95%;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
 }
 form label {
   margin-bottom: 0;

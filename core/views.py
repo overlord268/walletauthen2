@@ -28,14 +28,16 @@ def index(request):
 def pago(request):
     if request.method == 'POST':
         form = CompraForm(request.POST)
+        print("form")
+        print(form.is_valid())
         if form.is_valid():
             # TODOPAGO
             tarjetaExpiration = (form.cleaned_data['tarjeta_expiration_field']).split('/')
-            tarjetaExpirationMonth = tarjetaExpiration[0]
-            tarjetaExpirationYear = tarjetaExpiration[1]
+            tarjetaExpirationMonth = "".join(tarjetaExpiration[0].split())
+            tarjetaExpirationYear = "".join(tarjetaExpiration[1].split())
             responseTodoPago = postTodoPago(
                 form.cleaned_data['lempiras_field'], 
-                form.cleaned_data['tarjeta_numero_field'], 
+                "".join(form.cleaned_data['tarjeta_numero_field'].split()), 
                 form.cleaned_data['tarjeta_nombre_field'], 
                 form.cleaned_data['tarjeta_cvc_field'], 
                 tarjetaExpirationMonth, 

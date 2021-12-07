@@ -7,9 +7,15 @@
         let btc = (parseFloat(lempiras) / result).toFixed(8);
         $("#id_amount_field").val(btc);
         $("#id_lempiras_field").val(lempiras);
-        $("#id_amount_field").prop('disabled', true);
-        $("#id_lempiras_field").prop('disabled', true);
+        $("#id_amount_field").prop('readonly', 'readonly');
+        $("#id_lempiras_field").prop('readonly', 'readonly');
     });
+
+    // Validate a credit card number
+    //$.payform.validateCardNumber('4242 4242 4242 4242'); //=> true
+
+    // Get card type from number
+    //$.payform.parseCardType('4242 4242 4242 4242'); //=> 'visa'
 })();
 
 function calcularConversion(criptomoneda) {
@@ -49,8 +55,8 @@ function comprarBitcoin() {
         let lempiras = $("#textInput2").val();
         $("#id_amount_field").val(btc);
         $("#id_lempiras_field").val(lempiras);
-        $("#id_amount_field").prop('disabled', true);
-        $("#id_lempiras_field").prop('disabled', true);
+        $("#id_amount_field").prop('readonly', 'readonly');
+        $("#id_lempiras_field").prop('readonly', 'readonly');
     });
 }
 
