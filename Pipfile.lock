@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "9efdc44b8451d9debe5ca0374f25eeefc57278649aaf0f4bd01dfedd50e5db71"
+            "sha256": "886cde5514009cf0b7b48debcfae90334571c5d9295b2065a218dbbe5c2bfc0b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -46,6 +46,14 @@
             ],
             "index": "pypi",
             "version": "==3.2.8"
+        },
+        "django-environ": {
+            "hashes": [
+                "sha256:42593bee519a527602a467c7b682aee1a051c2597f98c45f4f4f44169ecdb6e5",
+                "sha256:6f0bc902b43891656b20486938cba0861dc62892784a44919170719572a534cb"
+            ],
+            "index": "pypi",
+            "version": "==0.8.1"
         },
         "electrum-scripting": {
             "hashes": [

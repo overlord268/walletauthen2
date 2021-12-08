@@ -1,7 +1,6 @@
 from django.urls import path
-from . import views
+from .views import clsIndex
 
 urlpatterns = [
-  path('', views.index , name='home'),
-  path('/pago', views.pago , name='pago'),
+  path('', clsIndex.as_view(), name='home'),
 ]
