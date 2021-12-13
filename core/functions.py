@@ -1,12 +1,16 @@
+import environ
+import os
+import requests
 from datetime import datetime
-from requests.structures import CaseInsensitiveDict
-from django.http import HttpResponseRedirect, JsonResponse
 from pathlib import Path
-import os, environ, requests
+from requests.structures import CaseInsensitiveDict
 
 env = environ.Env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+token = ""
+transactionID = ""
+externalReference = ""
 
 
 def postTodoPago(lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC, tarjetaExpirationMonth, tarjetaExpirationYear):
@@ -16,7 +20,6 @@ def postTodoPago(lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC, tarjetaExpi
       token = responseLogin['data']['token']
       responsePayDirect = postTodoPagoPayDirect(token, lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC,
                                                 tarjetaExpirationMonth, tarjetaExpirationYear)
-      print("RESPONSE PAYDIRECT", responsePayDirect)
       return responsePayDirect
     else:
       return {"error": "Se encontro un error en todo pago pay direct"}
@@ -29,16 +32,14 @@ def postTodoPagoLogin():
     urlLogin = 'https://preprod-api.todopago.hn/pay/v1/login'
     user = env('USER_TODO_PAGO')
     password = env('PASSWORD_TODO_PAGO')
-
     headers = CaseInsensitiveDict()
     headers["Content-Type"] = "application/json"
     headers["Accept"] = "*/*"
     headers["X-Tenant"] = "HNTP"
-
     body = '{"user":"' + user + '", "password":"' + password + '"}'
-
     result = requests.post(urlLogin, headers=headers, data=body)
     res = result.json()
+    print("postTodoPagoLogin_res: ", res)
     if res['status'] == 200:
       return res
     else:
@@ -53,17 +54,14 @@ def postTodoPagoPayDirect(token, lempiras, tarjetaNumero, tarjetaNombre, tarjeta
                           tarjetaExpirationYear):
   try:
     urlPayDirect = 'https://preprod-api.todopago.hn/pay/v1/direct-payment-without-register'
-
     headers = CaseInsensitiveDict()
     headers["Content-Type"] = "application/json"
     headers["Accept"] = "*/*"
     headers["X-Token"] = token
     headers["X-Tenant"] = "HNTP"
     headers["X-Content"] = "json"
-
     now = datetime.now()
     externalReference = "".join(tarjetaNombre.split()) + "-" + now.strftime('%d-%m-%Y-%H:%M')
-
     body = '{"accountNumber": "' + tarjetaNumero + '", "amount": ' + str(lempiras)
     body += ', "taxes": "15", "cardHolderName": "'
     body += tarjetaNombre + '", "comment": "Pago Directo ' + tarjetaNombre
@@ -72,14 +70,12 @@ def postTodoPagoPayDirect(token, lempiras, tarjetaNumero, tarjetaNombre, tarjeta
     body += '", "expirationMonth": "' + tarjetaExpirationMonth
     body += '", "expirationYear": "' + tarjetaExpirationYear
     body += '", "externalReference": "' + externalReference + '", "customerEmail": "dtejada@isonet-globalsys.com", "terminalNbr": "1"}'
-
     result = requests.post(urlPayDirect, headers=headers, data=body)
     res = result.json()
+    print("postTodoPagoPayDirect_res: ", res)
     if res['status'] == 200:
-      print("Done, Status 200")
-      return res
+      return {"res": res, "token": token, "externalReference": externalReference}
     else:
-      print("ERROR POST TODO PAGO:", res['message'])
       return {'error': res['message']}
 
   except Exception as e:
@@ -87,30 +83,33 @@ def postTodoPagoPayDirect(token, lempiras, tarjetaNumero, tarjetaNombre, tarjeta
     return {'error': str(e)}
 
 
-def postElectrum(destination, amount):
+def postElectrum(destination, amount, tokenID, transactionID, externalReference):
   try:
     user = env('USER_ELECTRUM')
     password = env('PASSWORD_ELECTRUM')
     host = '127.0.0.1'
     port = '7777'
     bodyPassword = env('PASSWORD_ELECTRUM_WALLET')
-
     url = 'http://' + user + ':' + password + '@' + host + ':' + port + '/'
     headers = CaseInsensitiveDict()
     headers["Authorization"] = "Basic {}".format(env('PASSWORD_ELECTRUM'))
     headers["Content-Type"] = "application/json"
-
     now = datetime.now()
-    data = '{"jsonrpc":"2.0","id":"curltext","method":"payto","params":{"destination":"' + destination + '", "amount":"' + str(amount) + '", "password":"' + bodyPassword + '"}}'
-
-    print("POST DATA ELECTRUM: ", data)
+    data = '{"jsonrpc":"2.0","id":"curltext","method":"payto","params":{"destination":"' + destination + '", "amount":"' + str(
+      amount) + '", "password":"' + bodyPassword + '"}}'
     result = requests.post(url, headers=headers, data=data)
     res = result.json()
-    print("POST ELECTRUM: ", res)
-    return res
+    print("postElectrum_res: ", res)
+    if "error" in res:
+      resPaymentReversal = postPaymentReversal(tokenID, transactionID, externalReference)
+      return resPaymentReversal
+    else:
+      resB = postElectrumBroadcast(res['result'])
+      return resB
 
   except Exception as e:
     return {'error': str(e)}
+
 
 def postElectrumBroadcast(tx):
   try:
@@ -119,19 +118,40 @@ def postElectrumBroadcast(tx):
     host = '127.0.0.1'
     port = '7777'
     bodyPassword = env('PASSWORD_ELECTRUM_WALLET')
-
     url = 'http://' + user + ':' + password + '@' + host + ':' + port + '/'
     headers = CaseInsensitiveDict()
     headers["Authorization"] = "Basic {}".format(env('PASSWORD_ELECTRUM'))
     headers["Content-Type"] = "application/json"
-
     data = '{"jsonrpc":"2.0","id":"curltext","method":"broadcast", "params":{"tx":"' + tx + '"}}'
-
     result = requests.post(url, headers=headers, data=data)
     res = result.json()
-    print("POST ELECTRUM BROADCAST: ", res)
-    return res
+    print("postElectrumBroadcast_res: ", res)
+    if "error" in res:
+      resPaymentReversal = postPaymentReversal(token, transactionID, externalReference)
+      return resPaymentReversal
+    else:
+      return res
 
   except Exception as e:
     return {'error': str(e)}
 
+
+def postPaymentReversal(tokenID, transactionID, externalReference):
+  try:
+    url = "https://preprod-api.todopago.hn/pay/v1/payment-reversal"
+    headers = CaseInsensitiveDict()
+    headers["Accept"] = "application/json"
+    headers["X-Token"] = "{}".format(str(tokenID))
+    headers["X-Tenant"] = "HNTP"
+    headers["X-Content"] = "json"
+    headers["Content-Type"] = "application/json"
+    data = '{"transactionID": "' + str(transactionID) + '","externalReference": "' + str(externalReference) + '"}'
+    resp = requests.post(url, headers=headers, data=data)
+    res = resp.json()
+    print("postPaymenReversal_res:", res)
+    if res['status'] == 200:
+      return {"paymentReversal": res}
+    else:
+      return {'error': res['message']}
+  except Exception as e:
+    return {'error': str(e)}

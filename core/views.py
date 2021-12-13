@@ -1,7 +1,7 @@
 from django.db import transaction
 from .forms import CompraForm
 from django.views.generic import TemplateView
-from .functions import postTodoPago, postElectrum, postElectrumBroadcast
+from .functions import postTodoPago, postElectrum
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
@@ -29,31 +29,37 @@ class clsIndex(TemplateView):
               tarjetaExpirationMonth,
               tarjetaExpirationYear
             )
-            print(responseTodoPago)
-            if responseTodoPago['status'] == 200:
+            print("Todo Pago: ", responseTodoPago)
+            if responseTodoPago['res']['status'] == 200:
               # ELECTRUM
               print("BTC AMOUNT: ", form.cleaned_data['amount_field'])
-              # res = postElectrum(form.cleaned_data['address_field'], form.cleaned_data['amount_field'])
-              print("RESPONSE ELECTRUM: ", res)
+              res = postElectrum(
+                form.cleaned_data['address_field'],
+                form.cleaned_data['amount_field'],
+                responseTodoPago['token'],
+                responseTodoPago['res']['data']['transaccionID'],
+                responseTodoPago['externalReference']
+              )
+              print("postElectrum_res: ", res)
+
               if 'error' in res:
-                print("ERROR")
                 if 'HTTPConnectionPool' in res['error']:
                   # No se pudo conectar con el proveedor de la Wallet
                   messages.add_message(request, messages.ERROR,
-                                       "Ocurrio un error en la Matrix | ERROR: 2")
+                                       "Ocurrio un error en la Matrix | ERROR: 1")
                 elif 'Insufficient funds' in res['error']['message']:
                   # Insuficientes fondos en Electrum Wallet
                   messages.add_message(request, messages.ERROR,
-                                       "Ocurrio un error en la Matrix | ERROR: 1")
-
+                                       "Ocurrio un error en la Matrix | ERROR: 2")
                 else:
                   messages.add_message(request, messages.ERROR,
-                                       "Ha ocurrido un error en la Matrix: ERROR 3")
+                                       "Ocurrido un error en la Matrix: ERROR 3")
+              elif 'paymentReversal' in res:
+                messages.add_message(request, messages.SUCCESS, "Ocurrio un error, se devolvieron sus fondos")
               else:
-                print('BROADCAST')
-                resB = postElectrumBroadcast(res['result'])
-                print(resB)
-                messages.add_message(request, messages.SUCCESS, "Se realizo el Post a electrum correctamente")
+                messages.add_message(request, messages.SUCCESS, "Se realizo el pago correctamente")
+                ## Aqui va
+
             else:
               messages.add_message(request, messages.ERROR,
                                    "Ha ocurrido un error 1: {}".format(responseTodoPago['message']))
@@ -64,7 +70,7 @@ class clsIndex(TemplateView):
     except Exception as e:
       print("EXCEPTION: ", str(e))
       messages.add_message(request, messages.ERROR,
-                           "Ha ocurrido un error 3: {}".format(str(e)))
+                           "Ocurrido un error en la Matrix: {}".format(str(e)))
       return redirect(reverse_lazy('home'))
 
   def get_context_data(self, **kwargs):
