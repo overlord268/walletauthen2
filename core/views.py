@@ -1,7 +1,7 @@
 from django.db import transaction
 from .forms import CompraForm
 from django.views.generic import TemplateView
-from .functions import postTodoPago, postElectrum
+from .functions import postTodoPago, postElectrum, postElectrumBroadcast
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
@@ -32,9 +32,11 @@ class clsIndex(TemplateView):
             print(responseTodoPago)
             if responseTodoPago['status'] == 200:
               # ELECTRUM
-              res = postElectrum(form.cleaned_data['address_field'], form.cleaned_data['amount_field'])
-              print("ELECTRUM POST", res)
-              if res['error']:
+              print("BTC AMOUNT: ", form.cleaned_data['amount_field'])
+              # res = postElectrum(form.cleaned_data['address_field'], form.cleaned_data['amount_field'])
+              print("RESPONSE ELECTRUM: ", res)
+              if 'error' in res:
+                print("ERROR")
                 if 'HTTPConnectionPool' in res['error']:
                   # No se pudo conectar con el proveedor de la Wallet
                   messages.add_message(request, messages.ERROR,
@@ -46,20 +48,23 @@ class clsIndex(TemplateView):
 
                 else:
                   messages.add_message(request, messages.ERROR,
-                                       "Ah ocurrido un error 2: {}".format(res['error']['message']))
+                                       "Ha ocurrido un error en la Matrix: ERROR 3")
               else:
-                print('Entro 2')
+                print('BROADCAST')
+                resB = postElectrumBroadcast(res['result'])
+                print(resB)
                 messages.add_message(request, messages.SUCCESS, "Se realizo el Post a electrum correctamente")
             else:
               messages.add_message(request, messages.ERROR,
-                                   "Ah ocurrido un error 1: {}".format(responseTodoPago['message']))
+                                   "Ha ocurrido un error 1: {}".format(responseTodoPago['message']))
             return redirect(reverse_lazy('home'))
         else:
           form = CompraForm()
           requestCopy = request.POST.copy()
     except Exception as e:
+      print("EXCEPTION: ", str(e))
       messages.add_message(request, messages.ERROR,
-                           "Ah ocurrido un error 3: {}".format(str(e)))
+                           "Ha ocurrido un error 3: {}".format(str(e)))
       return redirect(reverse_lazy('home'))
 
   def get_context_data(self, **kwargs):

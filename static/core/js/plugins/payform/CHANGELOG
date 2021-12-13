@@ -1,0 +1,50 @@
+= 1.4.0
+  * Add support for detaching events from input fields (see PR #62)
+  * Use a 2-digit precision for Mastercard BIN validation patterns (see PR #62)
+  
+= 1.3.0
+  * Updated Issuer Identification Number (IIN) patterns with documentaion (see PR #44 and #47)
+  * Allow right and left arrow keys to be used while navigating inside all input types (see PR #45)
+  * Fix issue with clearning selected text when typing (see PR #48)
+  * Fix issuewith the expiry field parsing when typing in a RTL context (see PR #50)
+  * Allow cursor repositioning when pasting full card numbers (see PR #51)
+
+= 1.2.5
+  * Fixes #37, allowing for vendoring and fix event normalization (PR #39)
+  * Fixes #38, full width character fixes for Safari
+  * Fixes #41, improve RTL support
+
+= 1.2.4
+  * Fix issue with cutting off last 2 digits of some cards (see #34 and #25)
+  * Update Mocha to 3.5.3 (CVE)
+
+= 1.2.3
+  * Fix issue in handling full width characters (see PR #36)
+
+= 1.2.2
+  * Fix IE11 hanging on input (see PR #32)
+
+= 1.2.1
+  * Correct Diners Club Pattern (regarding #19 and #22)
+
+= 1.2.0
+  * Updated Diners Club Pattern
+  * New Mastercard Ranges
+  * Support for full width input modes
+
+= 1.1.0
+  * Add jQuery Plugin shim
+  * Add numeric input formatter `numericInput`
+  * Move build process to makefile
+
+= 1.0.2
+  * Fix bug with 1 or 0 in expiry formatting
+  * Fix strange behavior with cursor position on 'change' events
+  * Fix FF bug navigating CVC field with arrows
+  * IE8 Support
+
+= 1.0.1
+  * Fix cursor issue when editing fields
+
+= 1.0.0
+  * Initial Release

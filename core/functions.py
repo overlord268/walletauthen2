@@ -100,13 +100,38 @@ def postElectrum(destination, amount):
     headers["Authorization"] = "Basic {}".format(env('PASSWORD_ELECTRUM'))
     headers["Content-Type"] = "application/json"
 
-    data = '{"jsonrpc":"2.0","id":"curltext","method":"payto","params":{"destination":"' + destination + '", "amount":"' + str(
-      amount) + '", "password":"' + bodyPassword + '"}}'
+    now = datetime.now()
+    data = '{"jsonrpc":"2.0","id":"curltext","method":"payto","params":{"destination":"' + destination + '", "amount":"' + str(amount) + '", "password":"' + bodyPassword + '"}}'
 
+    print("POST DATA ELECTRUM: ", data)
     result = requests.post(url, headers=headers, data=data)
     res = result.json()
-    print("POST ELECTRUM ERROR: ", res)
+    print("POST ELECTRUM: ", res)
     return res
 
   except Exception as e:
     return {'error': str(e)}
+
+def postElectrumBroadcast(tx):
+  try:
+    user = env('USER_ELECTRUM')
+    password = env('PASSWORD_ELECTRUM')
+    host = '127.0.0.1'
+    port = '7777'
+    bodyPassword = env('PASSWORD_ELECTRUM_WALLET')
+
+    url = 'http://' + user + ':' + password + '@' + host + ':' + port + '/'
+    headers = CaseInsensitiveDict()
+    headers["Authorization"] = "Basic {}".format(env('PASSWORD_ELECTRUM'))
+    headers["Content-Type"] = "application/json"
+
+    data = '{"jsonrpc":"2.0","id":"curltext","method":"broadcast", "params":{"tx":"' + tx + '"}}'
+
+    result = requests.post(url, headers=headers, data=data)
+    res = result.json()
+    print("POST ELECTRUM BROADCAST: ", res)
+    return res
+
+  except Exception as e:
+    return {'error': str(e)}
+
