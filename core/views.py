@@ -5,7 +5,7 @@ from .functions import postTodoPago, postElectrum
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
-from .models import Transaccion
+from .models import Transaccion, Estado
 
 
 class clsIndex(TemplateView):
@@ -30,9 +30,13 @@ class clsIndex(TemplateView):
             tarjetaExpirationYear = "".join(tarjetaExpiration[1].split())
 
             #DB
+            estados = Estado.objects.all()
+            for i in estados:
+              print('Estado es>', i)
             tx = Transaccion(amount_hnl=float(lempiras), amount_btc=float(btc), 
               wallet_address=str(wallet_address), btc_hnl_change=float(cambio), 
-              transaction_id_todopago='', transaction_id_electrum='', estado=1)
+              transaction_id_todopago='', transaction_id_electrum='', estado=estados.get(idEstado=1))
+
             tx.save()
 
             # TODOPAGO
@@ -49,10 +53,11 @@ class clsIndex(TemplateView):
             if responseTodoPago['res']['status'] == 200:
               #DB
               tx.transaction_id_todopago = str(responseTodoPago['res']['data']['transaccionID'])
-              tx.estado = 2
+              tx.estado = estados.get(idEstado=2)
               tx.save()
 
               # ELECTRUM
+              
               print("BTC AMOUNT: ", form.cleaned_data['amount_field'])
               res = postElectrum(
                 wallet_address,
@@ -80,7 +85,7 @@ class clsIndex(TemplateView):
                 messages.add_message(request, messages.SUCCESS, "Ocurrio un error, se devolvieron sus fondos")
               else:
                 tx.transaction_id_electrum = res['result']
-                tx.estado = 3
+                tx.estado = estados.get(idEstado=3)
                 tx.save()
                 messages.add_message(request, messages.SUCCESS, "Se realizo el pago correctamente")
                 ## Aqui va
