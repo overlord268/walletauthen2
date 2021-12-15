@@ -50,52 +50,53 @@ class clsIndex(TemplateView):
               tx.idTransaccion
             )
             print("Todo Pago: ", responseTodoPago)
-            if responseTodoPago['res']['status'] == 200:
-              #DB
-              tx.transaction_id_todopago = str(responseTodoPago['res']['data']['transaccionID'])
-              tx.estado = estados.get(idEstado=2)
-              tx.save()
+            if 'res' in responseTodoPago:
+              if responseTodoPago['res']['status'] == 200:
+                #DB
+                tx.transaction_id_todopago = str(responseTodoPago['res']['data']['transaccionID'])
+                tx.estado = estados.get(idEstado=2)
+                tx.save()
 
-              # ELECTRUM
-              print("BTC AMOUNT: ", form.cleaned_data['amount_field'])
-              res = postElectrum(
-                wallet_address,
-                btc,
-                responseTodoPago['token'],
-                responseTodoPago['res']['data']['transaccionID'],
-                responseTodoPago['externalReference']
-              )
+                # ELECTRUM
+                print("BTC AMOUNT: ", form.cleaned_data['amount_field'])
+                res = postElectrum(
+                  wallet_address,
+                  btc,
+                  responseTodoPago['token'],
+                  responseTodoPago['res']['data']['transaccionID'],
+                  responseTodoPago['externalReference']
+                )
 
-              print("postElectrum_res: ", res)
+                print("postElectrum_res: ", res)
 
-              if 'error' in res:
-                if 'HTTPConnectionPool' in res['error']:
-                  # No se pudo conectar con el proveedor de la Wallet
-                  tx.estado = estados.get(idEstado=5)
+                if 'error' in res:
+                  if 'HTTPConnectionPool' in res['error']:
+                    # No se pudo conectar con el proveedor de la Wallet
+                    tx.estado = estados.get(idEstado=5)
+                    tx.save()
+                    messages.add_message(request, messages.ERROR,
+                                        "Ocurrio un error en la Matrix | ERROR: 1")
+                  elif 'Insufficient funds' in res['error']['message']:
+                    # Insuficientes fondos en Electrum Wallet
+                    tx.estado = estados.get(idEstado=6)
+                    tx.save()
+                    messages.add_message(request, messages.ERROR,
+                                        "Ocurrio un error en la Matrix | ERROR: 2")
+                  else:
+                    tx.estado = estados.get(idEstado=7)
+                    tx.save()
+                    messages.add_message(request, messages.ERROR,
+                                        "Ocurrido un error en la Matrix: ERROR 3")
+                elif 'paymentReversal' in res:
+                  tx.estado = estados.get(idEstado=8)
                   tx.save()
-                  messages.add_message(request, messages.ERROR,
-                                       "Ocurrio un error en la Matrix | ERROR: 1")
-                elif 'Insufficient funds' in res['error']['message']:
-                  # Insuficientes fondos en Electrum Wallet
-                  tx.estado = estados.get(idEstado=6)
-                  tx.save()
-                  messages.add_message(request, messages.ERROR,
-                                       "Ocurrio un error en la Matrix | ERROR: 2")
+                  messages.add_message(request, messages.SUCCESS, "Ocurrio un error, se devolvieron sus fondos")
                 else:
-                  tx.estado = estados.get(idEstado=7)
+                  tx.transaction_id_electrum = res['result']
+                  tx.estado = estados.get(idEstado=3)
                   tx.save()
-                  messages.add_message(request, messages.ERROR,
-                                       "Ocurrido un error en la Matrix: ERROR 3")
-              elif 'paymentReversal' in res:
-                tx.estado = estados.get(idEstado=8)
-                tx.save()
-                messages.add_message(request, messages.SUCCESS, "Ocurrio un error, se devolvieron sus fondos")
-              else:
-                tx.transaction_id_electrum = res['result']
-                tx.estado = estados.get(idEstado=3)
-                tx.save()
-                messages.add_message(request, messages.SUCCESS, "Se realizo el pago correctamente")
-                ## Aqui va
+                  messages.add_message(request, messages.SUCCESS, "Se realizo el pago correctamente")
+                  ## Aqui va
 
             else:
               tx.estado = estados.get(idEstado=4)
