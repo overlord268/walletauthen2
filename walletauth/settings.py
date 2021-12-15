@@ -56,9 +56,9 @@ WSGI_APPLICATION = 'walletauth.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'wallethauthdb',
-        'USER': 'root',
-        'PASSWORD': '1234',
+        'NAME': 'walletauth',
+        'USER': 'electrumauth',
+        'PASSWORD': 'daniel',
         'HOST': 'localhost',
         'PORT': '',
     }

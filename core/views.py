@@ -102,7 +102,7 @@ class clsIndex(TemplateView):
               tx.estado = estados.get(idEstado=4)
               tx.save()
               messages.add_message(request, messages.ERROR,
-                                   "Ha ocurrido un error 1: {}".format(responseTodoPago['error']['message']))
+                                   "Ha ocurrido un error 1: {}".format(responseTodoPago['error']))
             return redirect(reverse_lazy('home'))
         else:
           form = CompraForm()
