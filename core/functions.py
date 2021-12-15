@@ -13,13 +13,13 @@ transactionID = ""
 externalReference = ""
 
 
-def postTodoPago(lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC, tarjetaExpirationMonth, tarjetaExpirationYear):
+def postTodoPago(lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC, tarjetaExpirationMonth, tarjetaExpirationYear, externalReference):
   try:
     responseLogin = postTodoPagoLogin()
     if responseLogin['status'] == 200:
       token = responseLogin['data']['token']
       responsePayDirect = postTodoPagoPayDirect(token, lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC,
-                                                tarjetaExpirationMonth, tarjetaExpirationYear)
+                                                tarjetaExpirationMonth, tarjetaExpirationYear, externalReference)
       return responsePayDirect
     else:
       return {"error": "Se encontro un error en todo pago pay direct"}
@@ -51,7 +51,7 @@ def postTodoPagoLogin():
 
 
 def postTodoPagoPayDirect(token, lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC, tarjetaExpirationMonth,
-                          tarjetaExpirationYear):
+                          tarjetaExpirationYear, externalReference):
   try:
     urlPayDirect = 'https://preprod-api.todopago.hn/pay/v1/direct-payment-without-register'
     headers = CaseInsensitiveDict()
@@ -61,7 +61,7 @@ def postTodoPagoPayDirect(token, lempiras, tarjetaNumero, tarjetaNombre, tarjeta
     headers["X-Tenant"] = "HNTP"
     headers["X-Content"] = "json"
     now = datetime.now()
-    externalReference = "".join(tarjetaNombre.split()) + "-" + now.strftime('%d-%m-%Y-%H:%M')
+    # externalReference = "".join(tarjetaNombre.split()) + "-" + now.strftime('%d-%m-%Y-%H:%M')
     body = '{"accountNumber": "' + tarjetaNumero + '", "amount": ' + str(lempiras)
     body += ', "taxes": "15", "cardHolderName": "'
     body += tarjetaNombre + '", "comment": "Pago Directo ' + tarjetaNombre
@@ -69,7 +69,7 @@ def postTodoPagoPayDirect(token, lempiras, tarjetaNumero, tarjetaNombre, tarjeta
     body += '", "cvc": "' + str(tarjetaCVC)
     body += '", "expirationMonth": "' + tarjetaExpirationMonth
     body += '", "expirationYear": "' + tarjetaExpirationYear
-    body += '", "externalReference": "' + externalReference + '", "customerEmail": "dtejada@isonet-globalsys.com", "terminalNbr": "1"}'
+    body += '", "externalReference": "' + str(externalReference) + '", "customerEmail": "dtejada@isonet-globalsys.com", "terminalNbr": "1"}'
     result = requests.post(urlPayDirect, headers=headers, data=body)
     res = result.json()
     print("postTodoPagoPayDirect_res: ", res)

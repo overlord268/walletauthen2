@@ -5,6 +5,7 @@ from .functions import postTodoPago, postElectrum
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
+from .models import Transaccion
 
 
 class clsIndex(TemplateView):
@@ -17,29 +18,50 @@ class clsIndex(TemplateView):
         if request.method == 'POST':
           form = CompraForm(request.POST)
           if form.is_valid():
-            # TODOPAGO
+            lempiras = form.cleaned_data['lempiras_field']
+            btc = form.cleaned_data['amount_field']
+            wallet_address = form.cleaned_data['address_field']
+            cambio = form.cleaned_data['cambio_btc_lempiras']
+            tarjeta_numero = "".join(form.cleaned_data['tarjeta_numero_field'].split())
+            tarjeta_nombre = form.cleaned_data['tarjeta_nombre_field']
+            tarjeta_cvc = form.cleaned_data['tarjeta_cvc_field']
             tarjetaExpiration = (form.cleaned_data['tarjeta_expiration_field']).split('/')
             tarjetaExpirationMonth = "".join(tarjetaExpiration[0].split())
             tarjetaExpirationYear = "".join(tarjetaExpiration[1].split())
+
+            #DB
+            tx = Transaccion(amount_hnl=float(lempiras), amount_btc=float(btc), 
+              wallet_address=str(wallet_address), btc_hnl_change=float(cambio), 
+              transaction_id_todopago='', transaction_id_electrum='', estado=1)
+            tx.save()
+
+            # TODOPAGO
             responseTodoPago = postTodoPago(
-              form.cleaned_data['lempiras_field'],
-              "".join(form.cleaned_data['tarjeta_numero_field'].split()),
-              form.cleaned_data['tarjeta_nombre_field'],
-              form.cleaned_data['tarjeta_cvc_field'],
+              lempiras,
+              tarjeta_numero,
+              tarjeta_nombre,
+              tarjeta_cvc,
               tarjetaExpirationMonth,
-              tarjetaExpirationYear
+              tarjetaExpirationYear,
+              tx.idTransaccion
             )
             print("Todo Pago: ", responseTodoPago)
             if responseTodoPago['res']['status'] == 200:
+              #DB
+              tx.transaction_id_todopago = str(responseTodoPago['res']['data']['transaccionID'])
+              tx.estado = 2
+              tx.save()
+
               # ELECTRUM
               print("BTC AMOUNT: ", form.cleaned_data['amount_field'])
               res = postElectrum(
-                form.cleaned_data['address_field'],
-                form.cleaned_data['amount_field'],
+                wallet_address,
+                btc,
                 responseTodoPago['token'],
                 responseTodoPago['res']['data']['transaccionID'],
                 responseTodoPago['externalReference']
               )
+
               print("postElectrum_res: ", res)
 
               if 'error' in res:
@@ -57,6 +79,9 @@ class clsIndex(TemplateView):
               elif 'paymentReversal' in res:
                 messages.add_message(request, messages.SUCCESS, "Ocurrio un error, se devolvieron sus fondos")
               else:
+                tx.transaction_id_electrum = res['result']
+                tx.estado = 3
+                tx.save()
                 messages.add_message(request, messages.SUCCESS, "Se realizo el pago correctamente")
                 ## Aqui va
 
