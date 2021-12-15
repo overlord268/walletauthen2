@@ -14,3 +14,4 @@ class Transaccion(models.Model):
 class Estado(models.Model):
   idEstado = models.BigAutoField(primary_key=True, db_column='idEstado')
   name = models.CharField(max_length=50)
+  descripcion = models.CharField(max_length=150)
