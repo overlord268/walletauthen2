@@ -106,6 +106,7 @@ class clsIndex(TemplateView):
         else:
           form = CompraForm()
           requestCopy = request.POST.copy()
+          return requestCopy
     except Exception as e:
       print("EXCEPTION: ", str(e))
       messages.add_message(request, messages.ERROR,
