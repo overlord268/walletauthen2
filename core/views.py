@@ -47,7 +47,7 @@ class clsIndex(TemplateView):
               tarjeta_cvc,
               tarjetaExpirationMonth,
               tarjetaExpirationYear,
-              tx.idTransaccion
+              'lb-' + str(tx.idTransaccion)
             )
             print("Todo Pago: ", responseTodoPago)
             if 'res' in responseTodoPago:
@@ -102,7 +102,7 @@ class clsIndex(TemplateView):
               tx.estado = estados.get(idEstado=4)
               tx.save()
               messages.add_message(request, messages.ERROR,
-                                   "Ha ocurrido un error 1: {}".format(responseTodoPago['message']))
+                                   "Ha ocurrido un error 1: {}".format(responseTodoPago['error']['message']))
             return redirect(reverse_lazy('home'))
         else:
           form = CompraForm()
