@@ -1,11 +1,12 @@
 from django.db import transaction
 from .forms import CompraForm
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from .functions import postTodoPago, postElectrum, getConversion
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, render
 from .models import Transaccion, Estado
+from django.http import JsonResponse
 
 
 class clsIndex(TemplateView):
@@ -26,7 +27,6 @@ class clsIndex(TemplateView):
     form = self.form_class(initial=self.initial)
     return render(request, self.template_name, {'form': form, 'btc_products': self.btc_products})
 
-  # @staticmethod
   def post(self, request, *args, **kwargs):
     try:
       with transaction.atomic():
@@ -141,3 +141,8 @@ class clsIndex(TemplateView):
     context['form'] = CompraForm
 
     return context
+
+class conversionBtcHnl(View):
+  def get(self, request):
+    cambio = getConversion('BTC')
+    return JsonResponse({'conversion': cambio})

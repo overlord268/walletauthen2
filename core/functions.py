@@ -22,11 +22,14 @@ def getConversion(criptomoneda):
     
     result = requests.get(url, headers=headers)
     res = result.json()
-    res_dict = dict(enumerate(res))
+    # res_dict = dict(enumerate(res))
     if result.status_code == 200:
-      conversion = float(res_dict[68]['rate'])
-      conversion += 0.1 * conversion
-      return float(conversion)
+      for cambio in res:
+        if cambio['code'] == 'HNL':
+          conversion = float(cambio['rate'])
+          conversion += 0.1 * conversion
+          break
+      return conversion
     else:
       return {'error': 'error'}
 
