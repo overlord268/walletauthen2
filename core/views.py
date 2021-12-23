@@ -1,7 +1,7 @@
 from django.db import transaction
 from .forms import CompraForm
 from django.views.generic import TemplateView, View
-from .functions import postTodoPago, postElectrum, getConversion
+from .functions import postTodoPago, postElectrum, getConversion, set_expirable_var, get_expirable_var
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, render
@@ -35,7 +35,7 @@ class clsIndex(TemplateView):
         if form.is_valid():
           lempiras = form.cleaned_data['lempiras_field']
           # cambio = form.cleaned_data['cambio_btc_lempiras']
-          cambio = getConversion('BTC')
+          cambio = getConversion('XXBTZ')
           # btc = form.cleaned_data['amount_field']
           btc = round((float(lempiras) / cambio), 8)
           wallet_address = form.cleaned_data['address_field']
@@ -144,5 +144,9 @@ class clsIndex(TemplateView):
 
 class conversionBtcHnl(View):
   def get(self, request):
-    cambio = getConversion('BTC')
-    return JsonResponse({'conversion': cambio})
+    cambio = getConversion('XXBTZ')
+    cambio_compra = cambio + 0.1 * cambio
+    cambio_venta = cambio - 0.1 * cambio
+    request.session['conversion_btc_hnl'] = cambio
+    set_expirable_var(request.session, 'conversion_btc_hnl', cambio, 60)
+    return JsonResponse({'conversion': cambio_compra, 'conversion1': cambio_venta})

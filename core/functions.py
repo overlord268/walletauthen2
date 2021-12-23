@@ -12,30 +12,67 @@ token = ""
 transactionID = ""
 externalReference = ""
 
+def getCurrencyRates(fiatCode, cryptoCode):
+  pair = cryptoCode + fiatCode #XXBTZUSD
+  url = 'https://api.kraken.com/0/public/Ticker?pair=' + pair
+
+  headers = CaseInsensitiveDict()
+  headers["Content-Type"] = "application/json"
+  headers["Accept"] = "*/*"
+
+  response = requests.get(url, headers=headers)
+  result = response.json()
+  rates = result["result"][pair]
+  return {"rates": {
+      "ask": rates["a"][0],
+      "bid": rates["b"][0]
+    }
+  }
+
+def ticker(fiatCode, cryptoCode):
+  if (fiatCode == 'USD' or fiatCode == 'EUR'):
+    return getCurrencyRates(fiatCode, cryptoCode)
+
+  url = 'https://bitpay.com/api/rates'
+
+  headers = CaseInsensitiveDict()
+  headers["Content-Type"] = "application/json"
+  headers["Accept"] = "*/*"
+
+  response = requests.get(url, headers=headers)
+  result = response.json()
+
+  usdRate = None
+  hnlRate = None
+  for cambio in result:
+    if cambio['code'] == 'USD':
+      usdRate = float(cambio['rate'])
+    elif cambio['code'] == 'HNL':
+      hnlRate = float(cambio['rate'])
+    
+    if usdRate != None and hnlRate != None:
+      break
+
+  fxRate = hnlRate/usdRate  
+  rates = getCurrencyRates('USD', cryptoCode)
+  return {"rates": {
+        "ask": float(rates["rates"]["ask"]) * fxRate,
+        "bid": float(rates["rates"]["bid"]) * fxRate
+      }
+    }
+
 def getConversion(criptomoneda):
   try:
-    url = 'https://bitpay.com/api/rates/' + criptomoneda
-    
-    headers = CaseInsensitiveDict()
-    headers["Content-Type"] = "application/json"
-    headers["Accept"] = "*/*"
-    
-    result = requests.get(url, headers=headers)
-    res = result.json()
-    # res_dict = dict(enumerate(res))
-    if result.status_code == 200:
-      for cambio in res:
-        if cambio['code'] == 'HNL':
-          conversion = float(cambio['rate'])
-          conversion += 0.1 * conversion
-          break
-      return conversion
-    else:
-      return {'error': 'error'}
+    rates = ticker("HNL", criptomoneda)
+    conversionA = float(rates["rates"]["ask"])
+    conversionB = float(rates["rates"]["bid"])
+    conversion = (conversionA + conversionB) / 2
+    return conversion
 
   except Exception as e:
     print("error:", str(e))
     return {'error': str(e)}
+
 
 def postTodoPago(lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC, tarjetaExpirationMonth, tarjetaExpirationYear, externalReference):
   try:
@@ -181,3 +218,17 @@ def postPaymentReversal(tokenID, transactionID, externalReference):
       return {'error': res['message']}
   except Exception as e:
     return {'error': str(e)}
+
+
+def set_expirable_var(session, var_name, value, expire_time):
+  session[var_name] = {'value': value, 'expire_time': expire_time}
+
+def get_expirable_var(session, var_name, default=None):
+  var = default
+  if var_name in session:  
+    my_variable_dict = session.get(var_name, {})
+    if my_variable_dict.get('expire_at', 0) > datetime.datetime.now().timestamp():
+      myvar = my_variable_dict.get('value')
+  else:
+    del session[var_name]
+  return var

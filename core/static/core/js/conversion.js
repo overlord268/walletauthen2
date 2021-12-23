@@ -5,11 +5,28 @@
         let lempiras = $(this).find('.precio').val();
         let result = await calcularConversion();
         let btc = (parseFloat(lempiras) / result).toFixed(8);
-        $("#id_cambio_btc_lempiras").val(result);
         $("#id_amount_field").val(btc);
         $("#id_lempiras_field").val(lempiras);
+
+        counter(lempiras, 60);
     });
 })();
+
+function counter(lempiras, secs) {
+    var countDown = secs;
+
+    setInterval(async function() {
+        document.getElementById("counter").innerHTML = "Válido durante " + countDown + "s ";
+        countDown -= 1;
+    
+        if (countDown == 0) {
+            let result = await calcularConversion();
+            let btc = (parseFloat(lempiras) / result).toFixed(8);
+            $("#id_amount_field").val(btc);
+            countDown = secs;
+        }
+    }, 1000);
+}
 
 function calcularConversion() {
     return new Promise(resolve => {
@@ -45,10 +62,10 @@ function comprarBitcoin() {
     $("#btncomprar").on("click", function () {
         let btc = $("#textInput").val();
         let lempiras = $("#textInput2").val();
-        let cambio = $("#textInput3").val();
-        $("#id_cambio_btc_lempiras").val(cambio);
         $("#id_amount_field").val(btc);
         $("#id_lempiras_field").val(lempiras);
+        
+        counter(lempiras, 60);
     });
 }
 
