@@ -25,6 +25,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -32,7 +33,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'walletauth.urls'
@@ -99,7 +99,8 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOWED_ORIGINS=['https://labitcoinera.com']
+CORS_ALLOW_METHODS=['GET']
 
 if DEBUG is False:
 
@@ -112,5 +113,3 @@ if DEBUG is False:
   SECURE_SSL_REDIRECT = True
   CSRF_COOKIE_SECURE = True
   SECURE_HSTS_PRELOAD = True  
-  
-  CORS_ORIGIN_WHITELIST = ('https://labitcoinera.com')
