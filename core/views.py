@@ -1,3 +1,4 @@
+import datetime
 from django.db import transaction
 from .forms import CompraForm
 from django.views.generic import TemplateView, View
@@ -35,7 +36,10 @@ class clsIndex(TemplateView):
         if form.is_valid():
           lempiras = form.cleaned_data['lempiras_field']
           # cambio = form.cleaned_data['cambio_btc_lempiras']
-          cambio = getConversion('XXBTZ')
+          cambio = get_expirable_var(request.session, 'conversion_btc_hnl')
+          if cambio == None:
+            print("Wooooo")
+            cambio = getConversion('XXBTZ')
           # btc = form.cleaned_data['amount_field']
           btc = round((float(lempiras) / cambio), 8)
           wallet_address = form.cleaned_data['address_field']
@@ -143,17 +147,22 @@ class clsIndex(TemplateView):
     return context
 
 class conversionBtcHnl(View):
+  acceptedCrypto = ['XXBTZ', 'XLTCZ']
+
   def get(self, request):
+    crypto = 'XXBTZ'
     if 'crypto' in request.GET:
       crypto = request.GET['crypto']
-    else:
-      crypto = 'XXBTZ'
-    if crypto == 'XXBTZ' or crypto == 'XLTCZ':
+    
+    if crypto in self.acceptedCrypto:
       cambio = getConversion(crypto)
       cambio_compra = cambio + 0.1 * cambio
       cambio_venta = cambio - 0.1 * cambio
-      request.session['conversion_btc_hnl'] = cambio
-      set_expirable_var(request.session, 'conversion_btc_hnl', cambio, 60)
+      
+      # request.session['conversion_btc_hnl'] = cambio
+      set_at = datetime.datetime.now().timestamp()
+      set_expirable_var(request.session, 'conversion_btc_hnl', cambio, set_at)
+
       return JsonResponse({'conversion': cambio_compra, 'conversion1': cambio_venta})
     else:
       return JsonResponse({'error': 'error'})
