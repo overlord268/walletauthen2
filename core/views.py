@@ -38,7 +38,6 @@ class clsIndex(TemplateView):
           # cambio = form.cleaned_data['cambio_btc_lempiras']
           cambio = get_expirable_var(request.session, 'conversion_btc_hnl')
           if cambio == None:
-            print("Wooooo")
             cambio = getConversion('XXBTZ')
           # btc = form.cleaned_data['amount_field']
           btc = round((float(lempiras) / cambio), 8)

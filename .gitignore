@@ -5,3 +5,7 @@
 .wall2.zip
 /.idea
 .idea
+*.log
+*.pot
+*.pyc
+__pycache__
