@@ -144,9 +144,17 @@ class clsIndex(TemplateView):
 
 class conversionBtcHnl(View):
   def get(self, request):
-    cambio = getConversion('XXBTZ')
-    cambio_compra = cambio + 0.1 * cambio
-    cambio_venta = cambio - 0.1 * cambio
-    request.session['conversion_btc_hnl'] = cambio
-    set_expirable_var(request.session, 'conversion_btc_hnl', cambio, 60)
-    return JsonResponse({'conversion': cambio_compra, 'conversion1': cambio_venta})
+    if 'crypto' in request.GET:
+      crypto = request.GET['crypto']
+    else:
+      crypto = 'XXBTZ'
+    if crypto == 'XXBTZ' or crypto == 'XLTCZ':
+      cambio = getConversion(crypto)
+      cambio_compra = cambio + 0.1 * cambio
+      cambio_venta = cambio - 0.1 * cambio
+      request.session['conversion_btc_hnl'] = cambio
+      set_expirable_var(request.session, 'conversion_btc_hnl', cambio, 60)
+      return JsonResponse({'conversion': cambio_compra, 'conversion1': cambio_venta})
+    else:
+      return JsonResponse({'error': 'error'})
+

@@ -9,9 +9,9 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY')
 
-DEBUG = env('DEBUG_STATUS')
+DEBUG = False
 
-ALLOWED_HOSTS = env('ALLOWED_HOST')
+ALLOWED_HOSTS = ['comprarbtc.labitcoinera.com','labitcoinera.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -20,10 +20,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core'
+    'core',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -96,6 +98,9 @@ USE_L10N = True
 USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOWED_ORIGINS=['https://labitcoinera.com']
+CORS_ALLOW_METHODS=['GET']
 
 if DEBUG is False:
 
