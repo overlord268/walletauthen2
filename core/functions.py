@@ -11,6 +11,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 token = ""
 transactionID = ""
 externalReference = ""
+SESSION_VARIABLE_DURATION = 60
+SESSION_VARIABLE_DURATION_TOLERANCE = 0.5
 
 def getCurrencyRates(fiatCode, cryptoCode):
   pair = cryptoCode + fiatCode #XXBTZUSD
@@ -121,7 +123,6 @@ def postTodoPagoPayDirect(token, lempiras, tarjetaNumero, tarjetaNombre, tarjeta
     headers["X-Token"] = token
     headers["X-Tenant"] = "HNTP"
     headers["X-Content"] = "json"
-    now = datetime.now()
     # externalReference = "".join(tarjetaNombre.split()) + "-" + now.strftime('%d-%m-%Y-%H:%M')
     body = '{"accountNumber": "' + tarjetaNumero + '", "amount": ' + str(lempiras)
     body += ', "taxes": "0", "cardHolderName": "'
@@ -220,15 +221,17 @@ def postPaymentReversal(tokenID, transactionID, externalReference):
     return {'error': str(e)}
 
 
-def set_expirable_var(session, var_name, value, expire_time):
-  session[var_name] = {'value': value, 'expire_time': expire_time}
+def set_expirable_var(session, var_name, value, set_at):
+  session[var_name] = {'value': value, 'set_at': set_at}
 
 def get_expirable_var(session, var_name, default=None):
-  var = default
-  if var_name in session:  
+  value = default
+  if var_name in session:
     my_variable_dict = session.get(var_name, {})
-    if my_variable_dict.get('expire_at', 0) > datetime.datetime.now().timestamp():
-      myvar = my_variable_dict.get('value')
+    set_at = my_variable_dict.get('set_at', 0)
+    difference = (datetime.now() - datetime.fromtimestamp(set_at, tz=None)).total_seconds()
+    if difference <= (SESSION_VARIABLE_DURATION + SESSION_VARIABLE_DURATION_TOLERANCE):
+      value = my_variable_dict.get('value')
   else:
     del session[var_name]
-  return var
+  return value

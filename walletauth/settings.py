@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
-    'corsheaders',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -112,4 +112,4 @@ if DEBUG is False:
   SECURE_REDIRECT_EXEMPT = []
   SECURE_SSL_REDIRECT = True
   CSRF_COOKIE_SECURE = True
-  SECURE_HSTS_PRELOAD = True
+  SECURE_HSTS_PRELOAD = True  
