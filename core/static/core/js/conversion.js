@@ -94,4 +94,3 @@ function Timer(fn, t) {
         return this.stop().start();
     }
 }
-

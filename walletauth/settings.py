@@ -11,7 +11,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['comprarbtc.labitcoinera.com','labitcoinera.com']
+ALLOWED_HOSTS = ['comprarbtc.labitcoinera.com','labitcoinera.com','www.labitcoinera.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -99,7 +99,7 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS=['https://labitcoinera.com']
+CORS_ALLOWED_ORIGINS=['https://labitcoinera.com','https://www.labitcoinera.com']
 CORS_ALLOW_METHODS=['GET']
 
 if DEBUG is False:
