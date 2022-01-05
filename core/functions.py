@@ -174,17 +174,14 @@ def postElectrum(destination, amount, tokenID, transactionID, externalReference)
 
 def postElectrumBroadcast(tx):
   try:
-    user = env('USER_ELECTRUM')
-    password = env('PASSWORD_ELECTRUM')
-    host = '127.0.0.1'
-    port = '7777'
-    bodyPassword = env('PASSWORD_ELECTRUM_WALLET')
-    url = 'http://' + user + ':' + password + '@' + host + ':' + port + '/'
+    host = env('HOST_ELECTRUM')
+    public_key = env('PUBLIC_KEY_ELECTRUM')
+    url = 'https://' + host + '/'
+
     headers = CaseInsensitiveDict()
-    headers["Authorization"] = "Basic {}".format(env('PASSWORD_ELECTRUM'))
     headers["Content-Type"] = "application/json"
     data = '{"jsonrpc":"2.0","id":"curltext","method":"broadcast", "params":{"tx":"' + tx + '"}}'
-    result = requests.post(url, headers=headers, data=data)
+    result = requests.post(url, headers=headers, data=data, verify=public_key)
     res = result.json()
     print("postElectrumBroadcast_res: ", res)
     if "error" in res:
