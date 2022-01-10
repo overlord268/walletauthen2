@@ -1,334 +1,186 @@
+{% extends 'core/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <!-- Basic -->
-  <meta charset="utf-8"/>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <!-- Mobile Metas -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-  <!-- Site Metas -->
-  <meta name="keywords" content="bitcoin, btc, compra"/>
-  <meta name="description" content="Sitio web de La Bitcoinera para la compra de Bitcoin."/>
-  <meta name="author" content="La Bitcoinera"/>
-  <link rel="shortcut icon" href="{% static "core/images/favicon.png" %}" type=" image/x-icon">
-  <title>Comprar Bitcoin en Línea</title>
-  <!-- bootstrap core css -->
-  <link rel="stylesheet" type="text/css" href="{% static "core/css/bootstrap.css" %}"/>
-  <!-- font awesome style -->
-  <link href="{% static "core/css/font-awesome.min.css" %}" rel="stylesheet"/>
-  <!-- Custom styles for this template -->
-  <link href="{% static "core/css/style.css" %}" rel="stylesheet"/>
-  <!-- responsive style -->
-  <link href="{% static "core/css/responsive.css" %}" rel="stylesheet"/>
-  <!-- Bootstrap -->
-  <link href="{% static "core/css/bootstrap.css" %}" rel="stylesheet"/>
-</head>
-<body>
-<div class="color">
-  <div class="hero_area">
-    <div class="hero_social">
-      <a href="https://www.facebook.com/LaBitcoineraHN">
-        <i class="fa fa-facebook" aria-hidden="true"></i>
-      </a>
-      <a href="https://twitter.com/La_Bitcoinera">
-        <i class="fa fa-twitter" aria-hidden="true"></i>
-      </a>
-      <a href="https://www.linkedin.com/company/tgu-consulting-group/">
-        <i class="fa fa-linkedin" aria-hidden="true"></i>
-      </a>
-      <a href="https://www.instagram.com/la_bitcoinera/">
-        <i class="fa fa-instagram" aria-hidden="true"></i>
-      </a>
-    </div>
-    <!-- header section  -->
-    <header class="header_section">
-      <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg custom_nav-container ">
-          <a class="navbar-brand" href="https://www.labitcoinera.com">
-            <span>
-              <img src="{% static "core/images/la_bitcoinera_color-banner.png" %}" style="width:35%">
-            </span>
-          </a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse"
-                  data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                  aria-expanded="false" aria-label="Toggle navigation">
-            <span class=""> </span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav">
-              <li class="nav-item active">
-                <a class="nav-link" href="https://www.labitcoinera.com">P&aacute;gina Principal <span class="sr-only">(current)</span></a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </div>
-    </header>
-    <!-- final header section -->
-    <div id="popup1" class="overlay">
-      <div class="popup">
-        <a class="close" href="#">&times;</a>
-        <div class="content">
-          <div class="popup-title">
-            Con tarjeta de crédito o débito:
-          </div>
-          <form role="form" method="post">
-            {% csrf_token %}
-            {% if messages %}
-              <div class="alert alert-success alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <h5><i class="icon fas fa-check"></i>Información</h5>
-                {% for message in messages %}
-                  {% if message.tags %}
-                    {{ message }}
-                  {% endif %}
-                {% endfor %}
-              </div>
-            {% endif %}
 
-            <div class="padding">
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="datos">
-                    <p id="counter"></p>
-                    {{ form.cambio_btc_lempiras }}
-                    {{ form.lempiras_field.label_tag }}
-                    {{ form.lempiras_field }}
-                    {{ form.amount_field.label_tag }}
-                    {{ form.amount_field }}
-                    {{ form.address_field.label_tag }}
-                    {{ form.address_field }}
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="card">
-                    <div class="card-header">
-                      <strong>Tarjeta</strong>
-                      <small>de crédito/débito</small>
-                    </div>
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-sm-12">
-                          <div class="form-group">
-                            <label>Nombre</label>
-                            {{ form.tarjeta_nombre_field }}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-sm-12">
-                          <div class="form-group">
-                            <label for="ccnumber">Credit Card Number</label>
-                            <div class="input-group">
-                              {{ form.tarjeta_numero_field }}
-                              <div class="input-group-append">
-                                <span class="input-group-text">
-                                  <i class="mdi mdi-credit-card"></i>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="form-group col-sm-6">
-                          <label for="ccmonth">Month</label>
-                          {{ form.tarjeta_expiration_field }}
-                        </div>
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label for="cvv">CVV/CVC</label>
-                            {{ form.tarjeta_cvc_field }}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-footer">
-                      <input type="submit" id="comprar" value="Comprar" class="btn btn-sm btn-success float-right">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
+{% block content %}
+<!-- pay popup section -->
+<div id="popup1" class="overlay">
+  <div class="popup">
+    <a class="close" href="#">&times;</a>
+    <div class="content">
+      <div class="popup-title">
+        Con tarjeta de crédito o débito:
       </div>
-    </div>
-    <section class="shop_section layout_padding">
-      <div class="container">
-        <div class="heading_container heading_center" style=" color:white">
-          <h2>
-            Crypto Monedas Disponibles & Montos
-          </h2>
-          {% if success %}
-            <label>Su transacción ha sido exitosa</label>
-          {% endif %}
-          {% if messages %}
-            <div class="alert alert-success alert-dismissible">
-              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-              <h5><i class="icon fas fa-check"></i> Información</h5>
-              {% for message in messages %}
-                {% if message.tags %}
-                  {{ message }}
-                {% endif %}
-              {% endfor %}
-            </div>
-          {% endif %}
-        </div>
-        <div class="row">
-          <!--"col-md-6-->
-          {% for item in btc_products %}
-            <div class="col-sm-6 col-xl-3" type="number" value="{{ item.price }}">
-              <div class="box single">
-                <a href="#popup1">
-                  <div class="img-box">
-                    <img src="{% static "core/images/w1.png" %}" alt="bitcoin logo">
-                  </div>
-                  <div class="detail-box">
-                    <h6>
-                      BTC
-                    </h6>
-                    <h6>
-                      Precio:
-                      <span>{{ item.price }}L.</span>
-                      <input type="hidden" class="precio" value="{{ item.price }}"/>
-                    </h6>
-                  </div>
-                  <div class="new">
-                    <span>
-                      Bitcoin
-                    </span>
-                  </div>
-                </a>
+      <form role="form" method="post">
+        {% csrf_token %}
+        {% if messages %}
+          <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-check"></i>Información</h5>
+            {% for message in messages %}
+              {% if message.tags %}
+                {{ message }}
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="padding">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="datos">
+                <p id="counter"></p>
+                {{ form.cambio_btc_lempiras }}
+                {{ form.lempiras_field.label_tag }}
+                {{ form.lempiras_field }}
+                {{ form.amount_field.label_tag }}
+                {{ form.amount_field }}
+                {{ form.address_field.label_tag }}
+                {{ form.address_field }}
               </div>
             </div>
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-header">
+                  <strong>Tarjeta</strong>
+                  <small>de crédito/débito</small>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>Nombre</label>
+                        {{ form.tarjeta_nombre_field }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label for="ccnumber">Credit Card Number</label>
+                        <div class="input-group">
+                          {{ form.tarjeta_numero_field }}
+                          <div class="input-group-append">
+                            <span class="input-group-text">
+                              <i class="mdi mdi-credit-card"></i>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-sm-6">
+                      <label for="ccmonth">Month</label>
+                      {{ form.tarjeta_expiration_field }}
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="cvv">CVV/CVC</label>
+                        {{ form.tarjeta_cvc_field }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <input type="submit" id="comprar" value="Comprar" class="btn btn-sm btn-success float-right">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- end pay popup section -->
+<!-- tienda section -->
+<section class="shop_section layout_padding">
+  <div class="container">
+    <div class="heading_container heading_center" style=" color:white">
+      <h2>
+        Crypto Monedas Disponibles & Montos
+      </h2>
+      {% if success %}
+        <label>Su transacción ha sido exitosa</label>
+      {% endif %}
+      {% if messages %}
+        <div class="alert alert-success alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <h5><i class="icon fas fa-check"></i> Información</h5>
+          {% for message in messages %}
+            {% if message.tags %}
+              {{ message }}
+            {% endif %}
           {% endfor %}
-          <div class="col-sm-6 col-xl-3">
-            <div class="box">
+        </div>
+      {% endif %}
+    </div>
+    <div class="row">
+      {% for item in btc_products %}
+        <div class="col-sm-6 col-xl-3" type="number" value="{{ item.price }}">
+          <div class="box single">
+            <a href="#popup1">
               <div class="img-box">
-                <div id="result">
-                  <span>Lempiras:</span>
-                  <input type="number" id="textInput2"/>
-                </div>
-                <div id="btcholder">
-                  <span>Bitcoin</span>
-                  <input type="number" id="textInput"/>
-                </div>
-                <input type="hidden" id="textInput3" value="0"/>
+                <img src="{% static "core/images/w1.png" %}" alt="bitcoin logo">
               </div>
               <div class="detail-box">
                 <h6>
                   BTC
                 </h6>
                 <h6>
-                  <span>
-                    <a href="#popup1" id="btncomprar">Comprar</a>
-                  </span>
+                  Precio:
+                  <span>{{ item.price }}L.</span>
+                  <input type="hidden" class="precio" value="{{ item.price }}"/>
                 </h6>
               </div>
               <div class="new">
                 <span>
-                  Ingrese su Monto:
+                  Bitcoin
                 </span>
               </div>
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+      <div class="col-sm-6 col-xl-3">
+        <div class="box">
+          <div class="img-box">
+            <div id="result">
+              <span>Lempiras:</span>
+              <input type="number" id="textInput2"/>
             </div>
+            <div id="btcholder">
+              <span>Bitcoin</span>
+              <input type="number" id="textInput"/>
+            </div>
+            <input type="hidden" id="textInput3" value="0"/>
+          </div>
+          <div class="detail-box">
+            <h6>
+              BTC
+            </h6>
+            <h6>
+              <span>
+                <a href="#popup1" id="btncomprar">Comprar</a>
+              </span>
+            </h6>
+          </div>
+          <div class="new">
+            <span>
+              Ingrese su Monto:
+            </span>
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- end tienda section -->
-
-    <!-- about section -->
-    <!-- end cliente section -->
-
-    <!-- final section -->
-    <footer class="footer_section" style="background-color: #311a52; left: -27px;">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 col-lg-4 footer-col">
-            <div class="footer_detail">
-              <h4>
-                ¿Qui&eacute;nes somos?
-              </h4>
-              <p>
-                La Bitcoinera es la primera empresa en encargarse de la compra y venta de distintas
-                crypto-monedas en Honduras.
-              </p>
-              <div class="footer_social">
-                <a href="https://www.facebook.com/LaBitcoineraHN">
-                  <i class="fa fa-facebook" aria-hidden="true"></i>
-                </a>
-                <a href="https://twitter.com/La_Bitcoinera">
-                  <i class="fa fa-twitter" aria-hidden="true"></i>
-                </a>
-                <a href="https://www.linkedin.com/company/tgu-consulting-group/">
-                  <i class="fa fa-linkedin" aria-hidden="true"></i>
-                </a>
-                <a href="https://www.instagram.com/la_bitcoinera/">
-                  <i class="fa fa-instagram" aria-hidden="true"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4 footer-col">
-            <div class="footer_contact">
-              <h4>
-                Puedes contactarnos
-              </h4>
-              <div class="contact_link_box">
-                <a href="https://www.google.com/maps?ll=14.101494,-87.180218&z=16&t=m&hl=es&gl=HN&mapclient=embed&cid=5709070165473088052" target="_blank">
-                  <i class="fa fa-map-marker" aria-hidden="true"></i>
-                  <span>
-                    Ubicaci&oacute;n
-                  </span>
-                </a>
-                <a href="#">
-                  <i class="fa fa-phone" aria-hidden="true"></i>
-                  <span>
-                    Llamar al +504 2204-6547
-                  </span>
-                </a>
-                <a href="#">
-                  <i class="fa fa-envelope" aria-hidden="true"></i>
-                  <span>
-                    operations@labitcoinera.com
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4 footer-col">
-            <div class="map_container">
-              <div class="map">
-                <div id="googleMap">
-                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3869.5979482271446!2d-87.18438128585333!3d14.100895192908595!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6fa2d8a9663f1f%3A0x4f3ab1114acdd234!2sEdificio%20Centro%20Moraz%C3%A1n!5e0!3m2!1ses!2shn!4v1639666779771!5m2!1ses!2shn" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="footer-info">
-          <p>
-            &copy; <span>2021</span> Todos los derechos reservados
-            <a href="https://html.design/">TGU Consulting Group</a>
-          </p>
-        </div>
-      </div>
-    </footer>
+    </div>
   </div>
-</div>
+</section>
+<!-- end tienda section -->
+{% endblock %}
+
+{% block scripts %}
 <!-- final section -->
-<!-- jQuery -->
-<script src="{% static "core/js/jquery-3.4.1.min.js" %}"></script>
 <script src="{% static "core/js/plugins/payform/dist/jquery.payform.js" %}"></script>
-<!-- popper js -->
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-</script>
-<!-- b js -->
-<script src= {% static "core/js/bootstrap.js" %}></script>
 <!--Conversion Javascript-->
 <script src="{% static "core/js/conversion.js" %}"></script>
 <script>
@@ -336,5 +188,4 @@
   $('#id_tarjeta_expiration_field').payform('formatCardExpiry');
   $('#id_tarjeta_cvc_field').payform('formatCardCVC');
 </script>
-</body>
-</html>
+{% endblock %}

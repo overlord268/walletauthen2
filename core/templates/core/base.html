@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <!-- Site Metas -->
+  <meta name="keywords" content="bitcoin, btc, compra"/>
+  <meta name="description" content="Sitio web de La Bitcoinera para la compra de Bitcoin."/>
+  <meta name="author" content="La Bitcoinera"/>
+  <link rel="shortcut icon" href="{% static "core/images/favicon.png" %}" type=" image/x-icon">
+  <title>Comprar Bitcoin en Línea</title>
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{% static "core/css/bootstrap.css" %}"/>
+  <!-- font awesome style -->
+  <link href="{% static "core/css/font-awesome.min.css" %}" rel="stylesheet"/>
+  <!-- Custom styles for this template -->
+  <link href="{% static "core/css/style.css" %}" rel="stylesheet"/>
+  <!-- responsive style -->
+  <link href="{% static "core/css/responsive.css" %}" rel="stylesheet"/>
+  <!-- Bootstrap -->
+  <link href="{% static "core/css/bootstrap.css" %}" rel="stylesheet"/>
+</head>
+<body>
+
+  <div id="content" class="color">
+    <div class="hero_area">
+      <!-- header section  -->
+      <header class="header_section">
+        <div class="container-fluid">
+          <nav class="navbar navbar-expand-lg custom_nav-container ">
+            <a class="navbar-brand" href="https://www.labitcoinera.com">
+              <span>
+                <img src="{% static "core/images/la_bitcoinera_color-banner.png" %}" style="width:35%">
+              </span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+              <span class=""> </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav">
+                <li class="nav-item active">
+                  <a class="nav-link" href="https://www.labitcoinera.com">Ir a La Bitcoinera</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </header>
+      <!-- final header section -->
+
+      {% block content %}
+      {% endblock %}
+
+      <!-- footer section -->
+      <footer class="footer_section" style="background-color: #311a52; left: -27px;">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 col-lg-4 footer-col">
+              <div class="footer_detail">
+                <h4>
+                  ¿Qui&eacute;nes somos?
+                </h4>
+                <p>
+                  La Bitcoinera es la primera empresa en encargarse de la compra y venta de distintas
+                  crypto-monedas en Honduras.
+                </p>
+                <div class="footer_social">
+                  <a href="https://www.facebook.com/LaBitcoineraHN">
+                    <i class="fa fa-facebook" aria-hidden="true"></i>
+                  </a>
+                  <a href="https://twitter.com/La_Bitcoinera">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                  </a>
+                  <a href="https://www.linkedin.com/company/tgu-consulting-group/">
+                    <i class="fa fa-linkedin" aria-hidden="true"></i>
+                  </a>
+                  <a href="https://www.instagram.com/la_bitcoinera/">
+                    <i class="fa fa-instagram" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4 footer-col">
+              <div class="footer_contact">
+                <h4>
+                  Puedes contactarnos
+                </h4>
+                <div class="contact_link_box">
+                  <a href="https://www.google.com/maps?ll=14.101494,-87.180218&z=16&t=m&hl=es&gl=HN&mapclient=embed&cid=5709070165473088052" target="_blank">
+                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                    <span>
+                      Ubicaci&oacute;n
+                    </span>
+                  </a>
+                  <a href="#">
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                    <span>
+                      Llamar al +504 2204-6547
+                    </span>
+                  </a>
+                  <a href="#">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                    <span>
+                      operations@labitcoinera.com
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4 footer-col">
+              <div class="map_container">
+                <div class="map">
+                  <div id="googleMap">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3869.5979482271446!2d-87.18438128585333!3d14.100895192908595!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6fa2d8a9663f1f%3A0x4f3ab1114acdd234!2sEdificio%20Centro%20Moraz%C3%A1n!5e0!3m2!1ses!2shn!4v1639666779771!5m2!1ses!2shn" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer-info">
+            <p>
+              &copy; <span>2022</span> Todos los derechos reservados
+              <a href="https://html.design/">TGU Consulting Group</a>
+            </p>
+          </div>
+        </div>
+      </footer>
+      <!-- end footer section -->
+    </div>
+  </div>
+
+  <script src="{% static "core/js/jquery-3.4.1.min.js" %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+  integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <script src= {% static "core/js/bootstrap.js" %}></script>
+  {% block scripts %}
+  {% endblock %}
+</body>
+</html>
