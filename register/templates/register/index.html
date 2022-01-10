@@ -1,0 +1,65 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<form role="form" method="post">
+  {% csrf_token %}
+  <div class="padding">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-header">
+            <strong>Registro</strong>
+            <small></small>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  {{ form.email_field.label_tag }}
+                  {{ form.email_field }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  {{ form.telefono_field.label_tag }}
+                  {{ form.telefono_field }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  {{ form.nombre_field.label_tag }}
+                  {{ form.nombre_field }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  {{ form.apellidos_field.label_tag }}
+                  {{ form.apellidos_field }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  {{ form.id_field.label_tag }}
+                  {{ form.id_field }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <input type="submit" id="registrar" value="Registrarme" class="btn btn-sm btn-success float-right">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</form>
+{% endblock %}
