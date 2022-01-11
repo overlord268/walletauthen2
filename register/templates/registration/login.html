@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+  <form role="form" method="post">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-sm-12 col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <strong>Inicio de sesi&oacute;n</strong>
+            <small></small>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-12">
+                {{form}}
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <p>Si no tienes una cuenta, puedes registrarte <a href="/register">aqu&iacute;</a>.</p>
+            <input type="submit" id="iniciar-sesion" value="Iniciar sesión" class="btn btn-sm btn-success">
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock %}

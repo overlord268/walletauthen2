@@ -158,19 +158,28 @@ a:focus {
   margin: auto;
 }
 
+.navbar-expand-lg .navbar-collapse {
+  display: block !important;
+}
+.collapse:not(.show) {
+  display: none !important;
+}
+.navbar-expand-lg .navbar-nav {
+  align-items: end;
+  justify-content: end;
+}
 .custom_nav-container .navbar-nav .nav-item .nav-link {
   white-space: nowrap;
-  padding: 5px 25px;
-  color: #000000;
-  text-align: center;
-  border-radius: 5px;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
+  -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+  color: #fff;
+  font-weight: 600;
+  border-bottom: 1px solid #fff;
+  padding: 5px;
+  margin: 0px 10px;
 }
-
 .custom_nav-container .navbar-nav .nav-item:hover .nav-link, .custom_nav-container .navbar-nav .nav-item.active .nav-link {
-  color: #000000;
-  background-color: #ffffff;
+  background-color: rgb(255 255 255 / 40%);
 }
 
 .custom_nav-container .navbar-toggler {
@@ -189,7 +198,6 @@ a:focus {
   display: block;
   width: 35px;
   height: 4px;
-  background-color: #000000;
   margin: 7px 0;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
@@ -204,13 +212,14 @@ a:focus {
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: #000000;
   top: -10px;
   border-radius: 5px;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
 }
-
+.custom_nav-container .navbar-toggler span, .custom_nav-container .navbar-toggler span::before, .custom_nav-container .navbar-toggler span::after {
+  background-color: #faf9fa;
+}
 .custom_nav-container .navbar-toggler span::after {
   top: 10px;
 }
