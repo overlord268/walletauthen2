@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, render
 from .models import Transaccion, Estado
+from register.models import Customer
 from django.http import JsonResponse
 
 
@@ -30,16 +31,15 @@ class clsIndex(TemplateView):
 
   def post(self, request, *args, **kwargs):
     try:
+      current_user = request.user
+      current_customer = Customer.objects.get(user=current_user)
       with transaction.atomic():
         form = self.form_class(request.POST)
-        #form = CompraForm(request.POST)
         if form.is_valid():
           lempiras = form.cleaned_data['lempiras_field']
-          # cambio = form.cleaned_data['cambio_btc_lempiras']
           cambio = get_expirable_var(request.session, 'conversion_btc_hnl')
           if cambio == None:
             cambio = getConversion('XXBTZ')
-          # btc = form.cleaned_data['amount_field']
           btc = round((float(lempiras) / cambio), 8)
           wallet_address = form.cleaned_data['address_field']
           
@@ -54,7 +54,8 @@ class clsIndex(TemplateView):
           estados = Estado.objects.all()
           tx = Transaccion(amount_hnl=float(lempiras), amount_btc=float(btc), 
             wallet_address=str(wallet_address), btc_hnl_change=float(cambio), 
-            transaction_id_todopago='', transaction_id_electrum='', estado=estados.get(idEstado=1))
+            transaction_id_todopago='', transaction_id_electrum='', estado=estados.get(idEstado=1), 
+            customer=current_customer)
 
           tx.save()
 
@@ -66,7 +67,8 @@ class clsIndex(TemplateView):
             tarjeta_cvc,
             tarjetaExpirationMonth,
             tarjetaExpirationYear,
-            'lb-' + str(tx.idTransaccion)
+            'lb-' + str(tx.idTransaccion), 
+            current_user.email
           )
           print("Todo Pago: ", responseTodoPago)
           if 'res' in responseTodoPago:
@@ -158,7 +160,6 @@ class conversionBtcHnl(View):
       cambio_compra = cambio + 0.1 * cambio
       cambio_venta = cambio - 0.1 * cambio
       
-      # request.session['conversion_btc_hnl'] = cambio
       set_at = datetime.datetime.now().timestamp()
       set_expirable_var(request.session, 'conversion_btc_hnl', cambio, set_at)
 

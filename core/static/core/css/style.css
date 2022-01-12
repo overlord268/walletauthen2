@@ -264,6 +264,10 @@ a:focus {
   -webkit-transform: none;
           transform: none;
 }
+.header-name {
+  color: #ffffff;
+  font-size: 18px;
+}
 
 .user_option-box {
   display: -webkit-box;

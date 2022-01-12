@@ -53,6 +53,9 @@
               </ul>
             </div>
           </nav>
+          {% if user.is_authenticated %}
+          <div class="header-name">Hola {{ user.first_name }}, disfruta de tu experiencia de compra.</div>
+          {% endif %}
         </div>
       </header>
       <!-- final header section -->

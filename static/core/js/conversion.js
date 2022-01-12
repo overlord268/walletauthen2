@@ -1,22 +1,23 @@
 let secs = 60;
 let countDown = secs;
 
+var timer = new Timer(async function() {
+    document.getElementById("counter").innerHTML = "Válido durante " + countDown + "s ";
+    countDown -= 1;
+
+    if (countDown == 0) {
+        countDown = secs;
+        let result = await calcularConversion();
+        let lempiras = $("#id_lempiras_field").val();
+        let btc = (parseFloat(lempiras) / result).toFixed(8);
+        $("#id_amount_field").val(btc);
+    }
+}, 1000);
+
 (function () {
     LiveConversion();
     comprarBitcoin();
 
-    var timer = new Timer(async function() {
-        document.getElementById("counter").innerHTML = "Válido durante " + countDown + "s ";
-        countDown -= 1;
-    
-        if (countDown == 0) {
-            countDown = secs;
-            let result = await calcularConversion();
-            let lempiras = $("#id_lempiras_field").val();
-            let btc = (parseFloat(lempiras) / result).toFixed(8);
-            $("#id_amount_field").val(btc);
-        }
-    }, 1000);
     timer.stop();
 
     $(".box.single a").on("click", async function() {

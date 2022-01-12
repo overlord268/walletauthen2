@@ -1,4 +1,5 @@
 from django.db import models
+from register.models import Customer
 
 class Transaccion(models.Model):
   idTransaccion = models.BigAutoField(db_column='idTransaccion', primary_key=True)
@@ -10,6 +11,7 @@ class Transaccion(models.Model):
   transaction_id_electrum = models.CharField(max_length=255)
   fecha_hora = models.DateTimeField(auto_now_add=True)
   estado = models.ForeignKey('Estado', models.DO_NOTHING, db_column='idEstado')
+  customer = models.ForeignKey(Customer, models.DO_NOTHING, db_column='idCustomer')
 
   def __str__(self):
     return '{}'.format(self.idTransaccion)
