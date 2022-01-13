@@ -128,7 +128,7 @@ class clsIndex(TemplateView):
             tx.estado = estados.get(idEstado=4)
             tx.save()
             self.mensaje = 'Ocurrió un error con el pago de su tarjeta.'
-          return redirect(reverse_lazy('home'))
+          # return redirect(reverse_lazy('home'))
         return render(request, self.template_name, {'form': form, 'btc_products': self.btc_products, 'esperar_verificacion': self.esperar_verificacion, 'mensaje': self.mensaje, 'success': self.success})
     except Exception as e:
       print("EXCEPTION: ", str(e))
