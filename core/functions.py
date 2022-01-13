@@ -92,7 +92,7 @@ def postTodoPago(lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC, tarjetaExpi
 
 def postTodoPagoLogin():
   try:
-    urlLogin = 'https://preprod-api.todopago.hn/pay/v1/login'
+    urlLogin = env('URL_TODO_PAGO') + 'login'
     user = env('USER_TODO_PAGO')
     password = env('PASSWORD_TODO_PAGO')
     headers = CaseInsensitiveDict()
@@ -116,7 +116,7 @@ def postTodoPagoLogin():
 def postTodoPagoPayDirect(token, lempiras, tarjetaNumero, tarjetaNombre, tarjetaCVC, tarjetaExpirationMonth,
                           tarjetaExpirationYear, externalReference, email):
   try:
-    urlPayDirect = 'https://preprod-api.todopago.hn/pay/v1/direct-payment-without-register'
+    urlPayDirect = env('URL_TODO_PAGO') + 'direct-payment-without-register'
     headers = CaseInsensitiveDict()
     headers["Content-Type"] = "application/json"
     headers["Accept"] = "*/*"
@@ -196,7 +196,7 @@ def postElectrumBroadcast(tx):
 
 def postPaymentReversal(tokenID, transactionID, externalReference):
   try:
-    url = "https://preprod-api.todopago.hn/pay/v1/payment-reversal"
+    url = env('URL_TODO_PAGO') + "payment-reversal"
     headers = CaseInsensitiveDict()
     headers["Accept"] = "application/json"
     headers["X-Token"] = "{}".format(str(tokenID))

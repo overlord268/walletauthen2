@@ -2,6 +2,27 @@
 {% load static %}
 
 {% block content %}
+{% if esperar_verificacion %}
+<!-- tienda section -->
+<section class="shop_section layout_padding">
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <strong>Verificaci&oacute;n en proceso</strong>
+        <small></small>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <div>Espere un momento mientras verificamos que haya realizado su registro correctamente.</div>
+            <div>Este proceso no deber&iacute;a tardar m&aacute;s de 24 horas, por lo que si contin&uacute;a con su problema contáctenos por alguno de los medios disponibles.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% else %}
 <!-- pay popup section -->
 <div id="popup1" class="overlay">
   <div class="popup">
@@ -176,6 +197,7 @@
   </div>
 </section>
 <!-- end tienda section -->
+{% endif %}
 {% endblock %}
 
 {% block scripts %}

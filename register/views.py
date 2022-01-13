@@ -26,7 +26,7 @@ class registerIndex(TemplateView):
           telefono = form.cleaned_data['telefono_field']
           nombre = form.cleaned_data['nombre_field']
           apellidos = form.cleaned_data['apellidos_field']
-          numero_id = form.cleaned_data['id_field']
+          # numero_id = form.cleaned_data['id_field']
           password = form.cleaned_data['password_field']
           password_confirm = form.cleaned_data['password_confirm_field']
 
@@ -37,7 +37,8 @@ class registerIndex(TemplateView):
                                       password=password,
                                       first_name=nombre,
                                       last_name=apellidos)
-              customer = Customer(user=user, telefono=telefono, numero_ID=numero_id)
+              # customer = Customer(user=user, telefono=telefono, numero_ID=numero_id)
+              customer = Customer(user=user, telefono=telefono, numero_ID=None)
               customer.save()
               self.mensaje = 'El usuario se creó correctamente'
               self.creado = True
