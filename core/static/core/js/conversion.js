@@ -95,3 +95,12 @@ function Timer(fn, t) {
         return this.stop().start();
     }
 }
+
+function loadOnce() {
+    splitted = window.location.href.split("#");
+    if (splitted.length > 1) {
+        console.log(splitted);
+        window.location = splitted[0];
+    }
+    //window.location.reload(); 
+}
