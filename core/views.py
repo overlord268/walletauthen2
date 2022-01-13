@@ -28,18 +28,18 @@ class clsIndex(TemplateView):
 
   def get(self, request):
     form = self.form_class(initial=self.initial)
-    current_user = request.user
-    current_customer = Customer.objects.get(user=current_user)
-    if current_customer.numero_ID == None:
-      self.esperar_verificacion = True
+    #current_user = request.user
+    #current_customer = Customer.objects.get(user=current_user)
+    # if current_customer.numero_ID == None:
+    #  self.esperar_verificacion = True
     return render(request, self.template_name, {'form': form, 'btc_products': self.btc_products, 'esperar_verificacion': self.esperar_verificacion})
 
   def post(self, request, *args, **kwargs):
     try:
       current_user = request.user
       current_customer = Customer.objects.get(user=current_user)
-      if current_customer.numero_ID == None:
-        self.esperar_verificacion = True
+      #if current_customer.numero_ID == None:
+      #  self.esperar_verificacion = True
       with transaction.atomic():
         form = self.form_class(request.POST)
         if form.is_valid():
