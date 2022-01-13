@@ -74,7 +74,7 @@ class clsIndex(TemplateView):
             tarjeta_cvc,
             tarjetaExpirationMonth,
             tarjetaExpirationYear,
-            'lb-' + str(tx.idTransaccion), 
+            'preprod-' + str(tx.idTransaccion), 
             current_user.email
           )
           print("Todo Pago: ", responseTodoPago)
