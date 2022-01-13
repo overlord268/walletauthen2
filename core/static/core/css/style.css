@@ -1016,35 +1016,11 @@ form .padding {
   opacity: 1;
 }
 
-.popup {
-  margin: 70px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 5px;
-  width: 50%;
-  position: relative;
-  transition: all 5s ease-in-out;
-  
+.modal-dialog {
+  max-width: 700px;
+  font-size: 0.9em;
 }
 
-.popup .close {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  transition: all 200ms;
-  font-size: 30px;
-  font-weight: bold;
-  text-decoration: none;
-  color: #333;
-}
-.popup .close:hover {
-  color: #06D85F;
-}
-.popup .content {
-  height: 450px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
 #btcholder input {
   width: 170px;
   position: relative;

@@ -23,97 +23,101 @@
   </div>
 </section>
 {% else %}
-<!-- pay popup section -->
-<div id="popup1" class="overlay">
-  <div class="popup">
-    <a class="close" href="#">&times;</a>
-    <div class="content">
-      <div class="popup-title">
-        Con tarjeta de crédito o débito:
+<!-- pay modal section -->
+<div class="modal fade" id="popup" tabindex="-1" role="dialog" aria-labelledby="popupLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="popupLabel">Pago con tarjeta de crédito o débito:</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <form role="form" method="post">
-        {% csrf_token %}
-        {% if messages %}
-          <div class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h5><i class="icon fas fa-check"></i>Información</h5>
-            {% for message in messages %}
-              {% if message.tags %}
-                {{ message }}
-              {% endif %}
-            {% endfor %}
-          </div>
-        {% endif %}
-
-        <div class="padding">
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="datos">
-                <p id="counter"></p>
-                {{ form.cambio_btc_lempiras }}
-                {{ form.lempiras_field.label_tag }}
-                {{ form.lempiras_field }}
-                {{ form.amount_field.label_tag }}
-                {{ form.amount_field }}
-                {{ form.address_field.label_tag }}
-                {{ form.address_field }}
-              </div>
+      <div class="modal-body">
+        <form role="form" method="post">
+          {% csrf_token %}
+          {% if messages %}
+            <div class="alert alert-success alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+              <h5><i class="icon fas fa-check"></i>Información</h5>
+              {% for message in messages %}
+                {% if message.tags %}
+                  {{ message }}
+                {% endif %}
+              {% endfor %}
             </div>
-            <div class="col-sm-6">
-              <div class="card">
-                <div class="card-header">
-                  <strong>Tarjeta</strong>
-                  <small>de crédito/débito</small>
+          {% endif %}
+  
+          <div class="padding">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="datos">
+                  <p id="counter"></p>
+                  {{ form.cambio_btc_lempiras }}
+                  {{ form.lempiras_field.label_tag }}
+                  {{ form.lempiras_field }}
+                  {{ form.amount_field.label_tag }}
+                  {{ form.amount_field }}
+                  {{ form.address_field.label_tag }}
+                  {{ form.address_field }}
                 </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-sm-12">
-                      <div class="form-group">
-                        <label>Nombre</label>
-                        {{ form.tarjeta_nombre_field }}
+              </div>
+              <div class="col-sm-6">
+                <div class="card">
+                  <div class="card-header">
+                    <strong>Tarjeta</strong>
+                    <small>de crédito/débito</small>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label>Nombre</label>
+                          {{ form.tarjeta_nombre_field }}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-sm-12">
-                      <div class="form-group">
-                        <label for="ccnumber">Credit Card Number</label>
-                        <div class="input-group">
-                          {{ form.tarjeta_numero_field }}
-                          <div class="input-group-append">
-                            <span class="input-group-text">
-                              <i class="mdi mdi-credit-card"></i>
-                            </span>
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label for="ccnumber">Credit Card Number</label>
+                          <div class="input-group">
+                            {{ form.tarjeta_numero_field }}
+                            <div class="input-group-append">
+                              <span class="input-group-text">
+                                <i class="mdi mdi-credit-card"></i>
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="form-group col-sm-6">
-                      <label for="ccmonth">Month</label>
-                      {{ form.tarjeta_expiration_field }}
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="form-group">
-                        <label for="cvv">CVV/CVC</label>
-                        {{ form.tarjeta_cvc_field }}
+                    <div class="row">
+                      <div class="form-group col-sm-6">
+                        <label for="ccmonth">Month</label>
+                        {{ form.tarjeta_expiration_field }}
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="cvv">CVV/CVC</label>
+                          {{ form.tarjeta_cvc_field }}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="card-footer">
-                  <input type="submit" id="comprar" value="Comprar" class="btn btn-sm btn-success float-right">
+                  <div class="card-footer">
+                    <input type="submit" id="comprar" value="Comprar" class="btn btn-sm btn-success float-right">
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 </div>
-<!-- end pay popup section -->
+<!-- end pay modal section -->
 <!-- tienda section -->
 <section class="shop_section layout_padding">
   <div class="container">
@@ -121,26 +125,27 @@
       <h2>
         Crypto Monedas Disponibles & Montos
       </h2>
-      {% if success %}
-        <label>Su transacción ha sido exitosa</label>
-      {% endif %}
-      {% if messages %}
-        <div class="alert alert-success alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <h5><i class="icon fas fa-check"></i> Información</h5>
-          {% for message in messages %}
-            {% if message.tags %}
-              {{ message }}
-            {% endif %}
-          {% endfor %}
+      {% if mensaje != "" %}
+      <div class="row">
+        <div class="col-sm-12">
+          {% if success %}
+          <div class="alert alert-success" role="alert">
+            {{ mensaje }}
+          </div>
+          {% else %}
+          <div class="alert alert-danger" role="alert">
+            {{ mensaje }}
+          </div>
+          {% endif %}
         </div>
+      </div>
       {% endif %}
     </div>
     <div class="row">
       {% for item in btc_products %}
         <div class="col-sm-6 col-xl-3" type="number" value="{{ item.price }}">
           <div class="box single">
-            <a href="#popup1">
+            <a href="#" data-toggle="modal" data-target="#popup">
               <div class="img-box">
                 <img src="{% static "core/images/w1.png" %}" alt="bitcoin logo">
               </div>

@@ -15,6 +15,8 @@ class clsIndex(TemplateView):
   template_name = 'core/index.html'
   form_class = CompraForm
   initial = {'key': 'value'}
+  success = False
+  mensaje = ''
   esperar_verificacion = False
   btc_products = [
     {"price": 3000},
@@ -32,7 +34,7 @@ class clsIndex(TemplateView):
     #current_customer = Customer.objects.get(user=current_user)
     # if current_customer.numero_ID == None:
     #  self.esperar_verificacion = True
-    return render(request, self.template_name, {'form': form, 'btc_products': self.btc_products, 'esperar_verificacion': self.esperar_verificacion})
+    return render(request, self.template_name, {'form': form, 'btc_products': self.btc_products, 'esperar_verificacion': self.esperar_verificacion, 'mensaje': self.mensaje, 'success': self.success})
 
   def post(self, request, *args, **kwargs):
     try:
@@ -102,42 +104,38 @@ class clsIndex(TemplateView):
                   # No se pudo conectar con el proveedor de la Wallet
                   tx.estado = estados.get(idEstado=5)
                   tx.save()
-                  messages.add_message(request, messages.ERROR,
-                                      "Ocurrio un error en la Matrix | ERROR: 1")
+                  self.mensaje = 'Ocurrió un error en la matrix, vuelva a intentarlo dentro de un momento.'
                 elif 'Insufficient funds' in res['error']['message']:
                   # Insuficientes fondos en Electrum Wallet
                   tx.estado = estados.get(idEstado=6)
                   tx.save()
-                  messages.add_message(request, messages.ERROR,
-                                      "Ocurrio un error en la Matrix | ERROR: 2")
+                  self.mensaje = 'Ocurrió un error en la matrix, vuelva a intentarlo dentro de un momento, cuando hayamos terminado de recargar nuestros fondos.'
                 else:
                   tx.estado = estados.get(idEstado=7)
                   tx.save()
-                  messages.add_message(request, messages.ERROR,
-                                      "Ocurrido un error en la Matrix: ERROR 3")
+                  self.mensaje = 'Ocurrió un error en la matrix, vuelva a intentarlo dentro de un momento.'
               elif 'paymentReversal' in res:
                 tx.estado = estados.get(idEstado=8)
                 tx.save()
-                messages.add_message(request, messages.SUCCESS, "Ocurrio un error, se devolvieron sus fondos")
+                self.mensaje = 'Ocurrió un error en la matrix, pero tranquilo que devolvimos sus fondos. Vuelva a intentarlo dentro de un momento.'
               else:
                 tx.transaction_id_electrum = res['result']
                 tx.estado = estados.get(idEstado=3)
                 tx.save()
-                messages.add_message(request, messages.SUCCESS, "Se realizo el pago correctamente")
-                ## Aqui va
-
+                self.success = True
+                self.mensaje = 'Se realizó el pago correctamente.'
           else:
             tx.estado = estados.get(idEstado=4)
             tx.save()
-            messages.add_message(request, messages.ERROR,
-                                  "Ha ocurrido un error 1: {}".format(responseTodoPago['error']))
+            self.mensaje = 'Ocurrió un error con el pago de su tarjeta.'
           return redirect(reverse_lazy('home'))
-        return render(request, self.template_name, {'form': form, 'btc_products': self.btc_products, 'esperar_verificacion': self.esperar_verificacion})
+        return render(request, self.template_name, {'form': form, 'btc_products': self.btc_products, 'esperar_verificacion': self.esperar_verificacion, 'mensaje': self.mensaje, 'success': self.success})
     except Exception as e:
       print("EXCEPTION: ", str(e))
-      messages.add_message(request, messages.ERROR,
-                           "Ha ocurrido un error en la Matrix: {}".format(str(e)))
-      return redirect(reverse_lazy('home'))
+      form = self.form_class(initial=self.initial)
+      self.mensaje = 'Ocurrió un error inesperado en la matrix, vuelva a intentarlo dentro de un momento.'
+  
+    return render(request, self.template_name, {'form': form, 'btc_products': self.btc_products, 'esperar_verificacion': self.esperar_verificacion, 'mensaje': self.mensaje, 'success': self.success})
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
