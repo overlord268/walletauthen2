@@ -2,7 +2,7 @@ let secs = 60;
 let countDown = secs;
 
 var timer = new Timer(async function() {
-    document.getElementById("counter").innerHTML = "Válido durante " + countDown + "s ";
+    document.getElementById("counter").innerHTML = countDown;
     countDown -= 1;
 
     if (countDown == 0) {
@@ -21,13 +21,17 @@ var timer = new Timer(async function() {
     timer.stop();
 
     $(".box.single a").on("click", async function() {
+        $('#popup').modal("show");
+        
         let lempiras = $(this).find('.precio').val();
         let result = await calcularConversion();
         let btc = (parseFloat(lempiras) / result).toFixed(8);
         $("#id_amount_field").val(btc);
         $("#id_lempiras_field").val(lempiras);
+        $("#id_subtotal_field").val(parseFloat(lempiras) + 25 + (parseFloat(lempiras) * 0.04));
 
         timer.reset(1000);
+        return false;
     });
 })();
 
@@ -49,10 +53,20 @@ function comprarBitcoin() {
     $("#btncomprar").on("click", function () {
         let btc = $("#textInput").val();
         let lempiras = $("#textInput2").val();
-        $("#id_amount_field").val(btc);
-        $("#id_lempiras_field").val(lempiras);
-        
-        timer.reset(1000);
+        if (lempiras >= 500) {
+            $('#popup').modal("show");
+
+            $("#id_amount_field").val(btc);
+            $("#id_lempiras_field").val(lempiras);
+            $("#id_subtotal_field").val(parseFloat(lempiras) + 25 + (parseFloat(lempiras) * 0.04));
+            
+            timer.reset(1000);
+            $('#error-pop').removeClass('show');
+        } else {
+            $('#error-pop').addClass('show');
+            $('#popup').hide();
+        }
+        return false;
     });
 }
 

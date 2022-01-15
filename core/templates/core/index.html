@@ -52,18 +52,23 @@
             <div class="row">
               <div class="col-sm-6">
                 <div class="datos">
-                  <p id="counter"></p>
+                  <p style="margin-bottom: 5px;">Válido durante <span id="counter">60</span> segundos</p>
                   {{ form.cambio_btc_lempiras }}
                   {{ form.lempiras_field.label_tag }}
                   {{ form.lempiras_field }}
                   {{ form.amount_field.label_tag }}
                   {{ form.amount_field }}
+
+                  <label for="id_subtotal_field">Total a pagar (Lempiras):</label>
+                  <input type="text" name="subtotal_field" class="form-control" readonly="readonly" required="" id="id_subtotal_field">
+                  
                   {{ form.address_field.label_tag }}
                   {{ form.address_field }}
                 </div>
+                <hr>
                 <div class="datos-descripcion">
                   <div>* Se le cobrar&aacute;n 25 lempiras adicionales para cubrir los costos de la red de bitcoin.</div>
-                  <div>** Se le añadir&aacute; un recargo del 4% por el uso de la tarjeta de cr&eacute;dito/d&eacute;bito.</div>
+                  <div>** Se le añadir&aacute; un recargo del 4% por el uso de la tarjeta de cr&eacute;dito/d&eacute;bito. Este recargo lo cobra la pasarela de pagos con la que trabajamos.</div>
                 </div>
               </div>
               <div class="col-sm-6">
@@ -149,7 +154,8 @@
       {% for item in btc_products %}
         <div class="col-sm-6 col-xl-3" type="number" value="{{ item.price }}">
           <div class="box single">
-            <a href="#" data-toggle="modal" data-target="#popup">
+            <!--a href="#" data-toggle="modal" data-target="#popup"-->
+            <a href="#">
               <div class="img-box">
                 <img src="{% static "core/images/w1.png" %}" alt="bitcoin logo">
               </div>
@@ -180,7 +186,7 @@
               <input type="number" id="textInput2"/>
             </div>
             <div id="btcholder">
-              <span>Bitcoin</span>
+              <span>Bitcoin:</span>
               <input type="number" id="textInput"/>
             </div>
             <input type="hidden" id="textInput3" value="0"/>
@@ -191,10 +197,12 @@
             </h6>
             <h6>
               <span>
-                <a href="#" data-toggle="modal" data-target="#popup" id="btncomprar">Comprar</a>
+                <!--a href="#" data-toggle="modal" data-target="#popup" id="btncomprar">Comprar</a-->
+                <a href="#" id="btncomprar">Comprar</a>
               </span>
             </h6>
           </div>
+          <div id="error-pop">La compra m&iacute;nima es de 500L.</div>
           <div class="new">
             <span>
               Ingrese su Monto:

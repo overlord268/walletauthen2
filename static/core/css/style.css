@@ -1021,6 +1021,13 @@ form .padding {
   font-size: 0.9em;
 }
 
+.datos-descripcion {
+  font-size: 13px;
+}
+.datos-descripcion div {
+  margin: 10px 0;
+}
+
 #btcholder input {
   width: 170px;
   position: relative;
@@ -1043,6 +1050,17 @@ form .padding {
   position: relative;
   left: 85px;
   top: -50px; 
+}
+#error-pop {
+  border-top: 1px solid #ccc;
+  padding-top: 5px;
+  font-size: 13px;
+  text-align: left;
+  color: #e30000;
+  display: none;
+}
+#error-pop.show {
+  display: block;
 }
 
 .popup-title {
