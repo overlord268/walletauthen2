@@ -171,7 +171,7 @@ class conversionBtcHnl(View):
       cambio_venta = cambio - 0.1 * cambio
       
       set_at = datetime.datetime.now().timestamp()
-      set_expirable_var(request.session, 'conversion_btc_hnl', cambio, set_at)
+      set_expirable_var(request.session, 'conversion_btc_hnl', cambio_compra, set_at)
 
       return JsonResponse({'conversion': cambio_compra, 'conversion1': cambio_venta})
     else:

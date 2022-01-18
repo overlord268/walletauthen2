@@ -1,3 +1,4 @@
+from decimal import Decimal
 import environ
 import os
 import requests
@@ -155,9 +156,9 @@ def postElectrum(destination, amount, tokenID, transactionID, externalReference)
     headers = CaseInsensitiveDict()
     headers["Content-Type"] = "application/json"
     
-    data = '{"jsonrpc":"2.0","id":"curltext","method":"payto","params":{"destination":"' + destination + '", "amount":"' + str(
-      amount) + '", "password":"' + bodyPassword + '"}}'
-    
+    amount = str(amount)
+    data = '{"jsonrpc":"2.0","id":"curltext","method":"payto","params":{"destination":"' + destination + '", "amount":"' + amount + '", "password":"' + bodyPassword + '"}}'
+
     result = requests.post(url, headers=headers, data=data, verify=public_key)
     res = result.json()
     print("postElectrum_res: ", res)

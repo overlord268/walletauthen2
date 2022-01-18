@@ -8,8 +8,8 @@ var timer = new Timer(async function() {
     if (countDown == 0) {
         countDown = secs;
         let result = await calcularConversion();
-        let lempiras = $("#id_lempiras_field").val();
-        let btc = (parseFloat(lempiras) / result).toFixed(8);
+        let lempiras = parseFloat($("#id_lempiras_field").val()).toFixed(2);
+        let btc = (lempiras / parseFloat(result)).toFixed(8);
         $("#id_amount_field").val(btc);
     }
 }, 1000);
@@ -25,10 +25,11 @@ var timer = new Timer(async function() {
         
         let lempiras = $(this).find('.precio').val();
         let result = await calcularConversion();
-        let btc = (parseFloat(lempiras) / result).toFixed(8);
+        let btc = (lempiras / parseFloat(result)).toFixed(8);
+
         $("#id_amount_field").val(btc);
-        $("#id_lempiras_field").val(lempiras);
-        $("#id_subtotal_field").val(parseFloat(lempiras) + 25 + (parseFloat(lempiras) * 0.04));
+        $("#id_lempiras_field").val(parseFloat(lempiras).toFixed(2));
+        $("#id_subtotal_field").val((parseFloat(lempiras) + 25 + (parseFloat(lempiras) * 0.04)).toFixed(2));
 
         timer.reset(1000);
         return false;
@@ -39,7 +40,7 @@ function LiveConversion() {
     document.getElementById('textInput').oninput = async function() {
         let result = await calcularConversion();
         document.getElementById("textInput3").value = result;
-        document.getElementById("textInput2").value = result * parseFloat(document.getElementById('textInput').value);
+        document.getElementById("textInput2").value = (parseFloat(result) * parseFloat(document.getElementById('textInput').value)).toFixed(2);
     };
 
     document.getElementById('textInput2').oninput = async function() {
@@ -57,8 +58,8 @@ function comprarBitcoin() {
             $('#popup').modal("show");
 
             $("#id_amount_field").val(btc);
-            $("#id_lempiras_field").val(lempiras);
-            $("#id_subtotal_field").val(parseFloat(lempiras) + 25 + (parseFloat(lempiras) * 0.04));
+            $("#id_lempiras_field").val(parseFloat(lempiras).toFixed(2));
+            $("#id_subtotal_field").val((parseFloat(lempiras) + 25 + (parseFloat(lempiras) * 0.04)).toFixed(2));
             
             timer.reset(1000);
             $('#error-pop').removeClass('show');
@@ -76,7 +77,6 @@ function calcularConversion() {
             type: "GET",
             url: "/conversion/",
             success: function(data){
-                console.log("success");
                 resolve(data.conversion);
             },
             failure: function(data){
